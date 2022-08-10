@@ -1,0 +1,49 @@
+!Job
+target: !Target
+  head: bc6c4988691cf60ecac67542b2daa2ac19fde5d9
+  email: fionala@mathworks.com
+  branch: main
+  remote: https://github.com/mathworks/arrow
+  github_repo: mathworks/arrow
+  version: 8.0.0.dev1114
+  no_rc_version: 8.0.0.dev1114
+  no_rc_semver_version: 8.0.0-dev1114
+tasks:
+  homebrew-cpp: !Task
+    ci: github
+    template: homebrew-formulae/github.macos.yml
+    artifacts: []
+    params:
+      formula: apache-arrow.rb
+
+    branch: build-6-github-homebrew-cpp
+    commit: bb2b1d07f952228782ebd95c3c5c9a4e7ae3e444
+  homebrew-r-brew: !Task
+    ci: github
+    template: r/github.macos.brew.yml
+    artifacts: []
+    params:
+      formula: apache-arrow.rb
+
+  ############################## Arrow JAR's ##################################
+
+    branch: build-6-github-homebrew-r-brew
+    commit: cbfdb1d8d91345d9bc132801e0a13d1bddb584a7
+  homebrew-r-autobrew: !Task
+    ci: github
+    template: r/github.macos.autobrew.yml
+    artifacts: []
+    params: {}
+    branch: build-6-github-homebrew-r-autobrew
+    commit: 0bfcca6de67551948d1d47d30bcb3cff1be34b21
+  homebrew-cpp-autobrew: !Task
+    ci: github
+    template: homebrew-formulae/github.macos.yml
+    artifacts: []
+    params:
+      formula: autobrew/apache-arrow.rb
+
+    branch: build-6-github-homebrew-cpp-autobrew
+    commit: f8b6cee84fafaee04647f7560fdae3f0cf9c5490
+params: {}
+branch: build-6
