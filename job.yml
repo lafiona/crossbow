@@ -1,0 +1,43 @@
+!Job
+target: !Target
+  head: 0b90f2376f2e23127b237ac7db7da5bc09621179
+  email: fionala7@gmail.com
+  branch: ARROW-15693
+  remote: https://github.com/mathworks/arrow.git
+  github_repo: mathworks/arrow
+  version: 8.0.0.dev1124
+  no_rc_version: 8.0.0.dev1124
+  default_branch:
+  - main
+  - master
+  no_rc_semver_version: 8.0.0-dev1124
+tasks:
+  conan-maximum: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      flags: >-
+        -e ARROW_CONAN_PARQUET=True
+        -e ARROW_CONAN_WITH_BROTLI=True
+        -e ARROW_CONAN_WITH_GLOG=True
+        -e ARROW_CONAN_WITH_JEMALLOC=True
+        -e ARROW_CONAN_WITH_LZ4=True
+        -e ARROW_CONAN_WITH_SNAPPY=True
+      image: conan
+
+  ########################### Python Minimal ############################
+
+    branch: build-18-github-conan-maximum
+    commit: a458f5b9e4c4d003f45c2a3e7e8f1be407b449ab
+  conan-minimum: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      image: conan
+
+    branch: build-18-github-conan-minimum
+    commit: 5f43b619df2b41527b84d33ad9b1eaa22be9a99a
+params: {}
+branch: build-18
