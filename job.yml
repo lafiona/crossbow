@@ -1,0 +1,3809 @@
+!Job
+target: !Target
+  head: 0b90f2376f2e23127b237ac7db7da5bc09621179
+  email: fionala7@gmail.com
+  branch: ARROW-15693
+  remote: https://github.com/mathworks/arrow.git
+  github_repo: mathworks/arrow
+  version: 8.0.0.dev1124
+  no_rc_version: 8.0.0.dev1124
+  default_branch:
+  - main
+  - master
+  no_rc_semver_version: 8.0.0-dev1124
+tasks:
+  test-conda-python-3.7: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        PYTHON: '3.7'
+      image: conda-python
+    branch: build-32-github-test-conda-python-3.7
+    commit: 6198693b9ed56c982fc4e5efa23cd02c19065c9d
+  test-r-rhub-debian-gcc-release-custom-ccache: !Task
+    ci: azure
+    template: r/azure.linux.yml
+    artifacts: []
+    params:
+      r_org: rhub
+      r_image: debian-gcc-release
+      r_tag: latest
+      r_custom_ccache: true
+
+    branch: build-32-azure-test-r-rhub-debian-gcc-release-custom-ccache
+    commit: d7287e17b78db55ad477c27e1e9d4b8a8f5bfda2
+  test-r-rstudio-r-base-4.1-opensuse153: !Task
+    ci: azure
+    template: r/azure.linux.yml
+    artifacts: []
+    params:
+      r_org: rstudio
+      r_image: r-base
+      r_tag: 4.1-opensuse153
+
+  # This is with R built with --enable-lto
+  # CRAN also does R CMD INSTALL --use-LTO
+  # which overrides the UseLTO field in r/DESCRIPTION
+    branch: build-32-azure-test-r-rstudio-r-base-4.1-opensuse153
+    commit: a583cbe308c4efc5b5ba51ca738e561c260d1e1a
+  wheel-macos-big-sur-cp39-universal2: !Task
+    ci: github
+    template: python-wheels/github.osx.arm64.yml
+    artifacts:
+    - pyarrow-8.0.0.dev1124-cp39-cp39-macosx_10_13_universal2.whl
+    params:
+      arch: universal2
+      python_version: '3.9'
+      macos_deployment_target: '10.13'
+    branch: build-32-github-wheel-macos-big-sur-cp39-universal2
+    commit: 440ec17b91c21a5728e001f31db7da14fa2513ec
+  wheel-macos-mavericks-cp37-amd64: !Task
+    ci: github
+    template: python-wheels/github.osx.amd64.yml
+    artifacts:
+    - pyarrow-8.0.0.dev1124-cp37-cp37m-macosx_10_9_x86_64.whl
+    params:
+      python_version: '3.7'
+      macos_deployment_target: '10.9'
+      arrow_s3: OFF
+      arrow_gcs: OFF
+    branch: build-32-github-wheel-macos-mavericks-cp37-amd64
+    commit: b60e16f8bf6dcbe62376ee141d4bae291e27995e
+  test-conda-python-3.9-pandas-master: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        PYTHON: '3.9'
+        PANDAS: master
+        NUMPY: nightly
+      # use the latest pandas release, so prevent reusing any cached layers
+      flags: --no-leaf-cache
+      image: conda-python-pandas
+
+    branch: build-32-github-test-conda-python-3.9-pandas-master
+    commit: ba6c8a5341a7186be0200cb1bdcd5dcb68f37686
+  test-debian-10-cpp-i386: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        ARCH: i386
+        DEBIAN: '10'
+      flags: -e ARROW_S3=OFF -e ARROW_GANDIVA=OFF
+      image: debian-cpp
+    branch: build-32-github-test-debian-10-cpp-i386
+    commit: 348a9493b13d78716fe78a16fd13253d8ff84655
+  verify-rc-source-integration-macos-conda-amd64: !Task
+    ci: github
+    template: verify-rc/github.macos.amd64.yml
+    artifacts: []
+    params:
+      target: integration
+      use_conda: true
+      github_runner: macos-10.15
+    branch: build-32-github-verify-rc-source-integration-macos-conda-amd64
+    commit: 811b31fd8a385fbc327462bcb1d0cb4dd00d4920
+  conda-linux-gcc-py39-cpu: !Task
+    ci: azure
+    template: conda-recipes/azure.linux.yml
+    artifacts:
+    - arrow-cpp-8.0.0.dev1124-py39(h[a-z0-9]+)_0_cpu.tar.bz2
+    - pyarrow-8.0.0.dev1124-py39(h[a-z0-9]+)_0_cpu.tar.bz2
+    params:
+      config: linux_64_c_compiler_version9cuda_compiler_versionNonecxx_compiler_version9numpy1.19python3.9.____cpython
+    branch: build-32-azure-conda-linux-gcc-py39-cpu
+    commit: 7f89cac9e6413c1b991a087dbaf7528536cbc221
+  test-r-ubuntu-22.04: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: 22.04
+        R_PRUNE_DEPS: true
+      image: ubuntu-r-only-r
+
+  # This also has -flto=auto
+    branch: build-32-github-test-r-ubuntu-22.04
+    commit: cc6cd986a8183901f44ff9b53cccd1082295614c
+  test-fedora-35-cpp: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        FEDORA: 35
+      image: fedora-cpp
+
+    branch: build-32-github-test-fedora-35-cpp
+    commit: dddc0de7b0e9a55e83d225a05c00eb868e915863
+  test-debian-ruby: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      image: debian-ruby
+    branch: build-32-github-test-debian-ruby
+    commit: e82fe39ab35211d6f0db5b220e070d3def88b3b0
+  verify-rc-source-cpp-macos-amd64: !Task
+    ci: github
+    template: verify-rc/github.macos.amd64.yml
+    artifacts: []
+    params:
+      target: cpp
+      github_runner: macos-10.15
+    branch: build-32-github-verify-rc-source-cpp-macos-amd64
+    commit: 77182850e6573d3fee955abc83c27512e92130d5
+  verify-rc-source-integration-macos-amd64: !Task
+    ci: github
+    template: verify-rc/github.macos.amd64.yml
+    artifacts: []
+    params:
+      target: integration
+      github_runner: macos-10.15
+    branch: build-32-github-verify-rc-source-integration-macos-amd64
+    commit: 07ee8412f9c76c9a2e518489b1b7e60ee95c64db
+  test-conda-python-3.7-kartothek-latest: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        PYTHON: 3.7
+        KARTOTHEK: latest
+      flags: --no-leaf-cache
+      image: conda-python-kartothek
+    branch: build-32-github-test-conda-python-3.7-kartothek-latest
+    commit: ad6a74d2d5fa23ebc10df951f272b15c1baf6406
+  test-r-rstudio-r-base-4.2-centos7-devtoolset-8: !Task
+    ci: azure
+    template: r/azure.linux.yml
+    artifacts: []
+    params:
+      r_org: rstudio
+      r_image: r-base
+      r_tag: 4.2-centos7
+      devtoolset_version: 8
+
+    branch: build-32-azure-test-r-rstudio-r-base-4.2-centos7-devtoolset-8
+    commit: 31842600e4a5dc1d676ff3322b2fdad22964e040
+  test-ubuntu-default-docs: !Task
+    ci: azure
+    template: docker-tests/azure.linux.yml
+    artifacts:
+    - docs.tar.gz
+    params:
+      artifacts: build/docs.tar.gz
+      flags: -v $PWD/build/:/build/
+      image: ubuntu-docs
+      post_script: |
+        cd build
+        sudo chown -R ${USER}: .
+        tar cvzf docs.tar.gz docs
+    branch: build-32-azure-test-ubuntu-default-docs
+    commit: de7c078f80aca35eacee5d10d206738d71ff0265
+  test-r-depsource-system: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      flags: -e ARROW_DEPENDENCY_SOURCE=SYSTEM -e ARROW_GCS=OFF -e xsimd_SOURCE=BUNDLED
+      image: ubuntu-r-only-r
+
+    branch: build-32-github-test-r-depsource-system
+    commit: f60ca95c2b8ddf68c66cbbad8b25e6abeaeca668
+  verify-rc-source-csharp-linux-almalinux-8-amd64: !Task
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        ALMALINUX: '8'
+      target: csharp
+      distro: almalinux
+    branch: build-32-github-verify-rc-source-csharp-linux-almalinux-8-amd64
+    commit: c2f311403b56e45b6a19ac696fb3f3867b358f06
+  conda-osx-clang-py37-r41: !Task
+    ci: azure
+    template: conda-recipes/azure.osx.yml
+    artifacts:
+    - arrow-cpp-8.0.0.dev1124-py37(h[a-z0-9]+)_0_cpu.tar.bz2
+    - pyarrow-8.0.0.dev1124-py37(h[a-z0-9]+)_0_cpu.tar.bz2
+    params:
+      config: osx_64_numpy1.18python3.7.____cpython
+      r_config: osx_64_r_base4.1
+    branch: build-32-azure-conda-osx-clang-py37-r41
+    commit: 07486338483c9a504c6b3444ebe3194c7702c2f3
+  verify-rc-source-ruby-macos-amd64: !Task
+    ci: github
+    template: verify-rc/github.macos.amd64.yml
+    artifacts: []
+    params:
+      target: ruby
+      github_runner: macos-10.15
+
+    branch: build-32-github-verify-rc-source-ruby-macos-amd64
+    commit: bb3e10128cd7cc05bf3a0ec27832a4e902fd3792
+  centos-8-stream-arm64: !Task
+    ci: travis
+    template: linux-packages/travis.linux.arm64.yml
+    artifacts:
+    - arrow-dataset-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-dataset-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-dataset-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-dataset-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-dataset-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-dataset-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-dataset-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-debugsource-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-sql-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-sql-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-sql-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-sql-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-sql-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-sql-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-sql-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-python-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-python-flight-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-python-flight-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-python-flight-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-python-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-python-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet[0-9]+-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet[0-9]+-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet[0-9]+-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet[0-9]+-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma[0-9]+-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma[0-9]+-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma[0-9]+-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma[0-9]+-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-store-server-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-store-server-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    params:
+      target: centos-8-stream-aarch64
+      task_namespace: yum
+      upload_extensions:
+      - .rpm
+    branch: build-32-travis-centos-8-stream-arm64
+    commit: d220a9b39e7560ada8584b345c7f80f78c98b84b
+  test-conda-python-3.7-kartothek-master: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        PYTHON: 3.7
+        KARTOTHEK: master
+      flags: --no-leaf-cache
+      image: conda-python-kartothek
+
+    branch: build-32-github-test-conda-python-3.7-kartothek-master
+    commit: 2f71b2079c0a9d6c4ae7511edf1a50650452cef2
+  example-python-minimal-build-ubuntu-venv: !Task
+    ci: github
+    template: python-minimal-build/github.linux.yml
+    artifacts: []
+    params:
+      type: minimal_build
+      image: minimal-ubuntu-venv
+
+  ############################## Conda Linux ############################
+
+    branch: build-32-github-example-python-minimal-build-ubuntu-venv
+    commit: fcc43cf6863893a5715f703bf7358f04e7447cbe
+  test-r-devdocs: !Task
+    ci: github
+    template: r/github.devdocs.yml
+    artifacts: []
+    params: {}
+    branch: build-32-github-test-r-devdocs
+    commit: 6f9e6475719a4288fd75370b787fe43523028feb
+  test-r-linux-rchk: !Task
+    ci: github
+    template: r/github.linux.rchk.yml
+    artifacts: []
+    params: {}
+    branch: build-32-github-test-r-linux-rchk
+    commit: 132f090751fbe4ea585e51912a4f7275ed264064
+  test-conda-python-3.8-pandas-latest: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        PYTHON: '3.8'
+        PANDAS: latest
+        NUMPY: latest
+        # ensure we have at least one build with parquet encryption disabled
+        PARQUET_REQUIRE_ENCRYPTION: OFF
+      # use the latest pandas release, so prevent reusing any cached layers
+      flags: --no-leaf-cache
+      image: conda-python-pandas
+    branch: build-32-github-test-conda-python-3.8-pandas-latest
+    commit: 7048a43b0ba4e4c92923dcd3d306f9b129aa4003
+  test-fedora-35-python-3: !Task
+    ci: azure
+    template: docker-tests/azure.linux.yml
+    artifacts: []
+    params:
+      env:
+        FEDORA: 35
+      image: fedora-python
+
+    branch: build-32-azure-test-fedora-35-python-3
+    commit: 0ca8c71d9c2fd5f99c9bb7baedd6439f86a98a8a
+  wheel-macos-high-sierra-cp38-amd64: !Task
+    ci: github
+    template: python-wheels/github.osx.amd64.yml
+    artifacts:
+    - pyarrow-8.0.0.dev1124-cp38-cp38-macosx_10_13_x86_64.whl
+    params:
+      python_version: '3.8'
+      macos_deployment_target: '10.13'
+      arrow_s3: ON
+      arrow_gcs: ON
+    branch: build-32-github-wheel-macos-high-sierra-cp38-amd64
+    commit: 515828b3758844f34a00484598d2c5dfe69d9f8c
+  conda-clean: !Task
+    ci: azure
+    template: conda-recipes/azure.clean.yml
+    artifacts: []
+    params: {}
+    branch: build-32-azure-conda-clean
+    commit: 7e7c9799e518fdb69b4f39f5964b7c44dfa0004e
+  test-r-gcc-11: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: 22.04
+        GCC_VERSION: 11
+      image: ubuntu-r-only-r
+
+  # This also has -flto=auto
+    branch: build-32-github-test-r-gcc-11
+    commit: 85ae4f648b25694b0c60f1e1fe9e6ce5f0967278
+  conda-linux-gcc-py310-cpu: !Task
+    ci: azure
+    template: conda-recipes/azure.linux.yml
+    artifacts:
+    - arrow-cpp-8.0.0.dev1124-py310(h[a-z0-9]+)_0_cpu.tar.bz2
+    - pyarrow-8.0.0.dev1124-py310(h[a-z0-9]+)_0_cpu.tar.bz2
+    params:
+      config: linux_64_c_compiler_version9cuda_compiler_versionNonecxx_compiler_version9numpy1.21python3.10.____cpython
+    branch: build-32-azure-conda-linux-gcc-py310-cpu
+    commit: 13e30beb34242978ae26983820bfdac3a36e3924
+  verify-rc-source-go-linux-conda-latest-amd64: !Task
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        CONDA: latest
+      target: go
+      distro: conda
+    branch: build-32-github-verify-rc-source-go-linux-conda-latest-amd64
+    commit: a81dc9d4e97303051efbbdfac2b81177e313c0f3
+  test-conda-cpp: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      image: conda-cpp
+    branch: build-32-github-test-conda-cpp
+    commit: 3e19eda5d858fe8a9740a3c5be69152f16564323
+  debian-bullseye-arm64: !Task
+    ci: travis
+    template: linux-packages/travis.linux.arm64.yml
+    artifacts:
+    - gir1.2-arrow-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-arrow-dataset-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-arrow-flight-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-arrow-flight-sql-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-gandiva-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-parquet-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-dataset-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-dataset900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-flight-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-flight-sql-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-flight-sql900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-flight900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-python-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-python-flight-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-python-flight900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-python-flight900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-python900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-python900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libgandiva-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libgandiva900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libparquet-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libparquet900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    params:
+      target: debian-bullseye-arm64
+      task_namespace: apt
+      upload_extensions:
+      - .ddeb
+      - .deb
+      - .debian.tar.xz
+      - .dsc
+      - .orig.tar.gz
+    branch: build-32-travis-debian-bullseye-arm64
+    commit: c697ba79d20905d7b0e29559e89e67c18ab70aeb
+  test-r-rhub-debian-gcc-devel-lto-latest: !Task
+    ci: azure
+    template: r/azure.linux.yml
+    artifacts: []
+    params:
+      r_org: rhub
+      r_image: debian-gcc-devel-lto
+      r_tag: latest
+      flags: -e NOT_CRAN=false -e INSTALL_ARGS=--use-LTO
+
+  # This one has -flto=auto
+    branch: build-32-azure-test-r-rhub-debian-gcc-devel-lto-latest
+    commit: 6fddaeb255e13eadef0fe05a2fbc9392b06761bc
+  verify-rc-source-js-linux-conda-latest-amd64: !Task
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        CONDA: latest
+      target: js
+      distro: conda
+    branch: build-32-github-verify-rc-source-js-linux-conda-latest-amd64
+    commit: d52cd7b1664186abcac53ccdc0ad1d5d11f38ab0
+  test-ubuntu-18.04-r-sanitizer: !Task
+    ci: azure
+    template: docker-tests/azure.linux.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: 18.04
+        R_PRUNE_DEPS: true
+      image: ubuntu-r-sanitizer
+
+    branch: build-32-azure-test-ubuntu-18.04-r-sanitizer
+    commit: 3afb62a2ee88effbc19fcbd66c5937bf9d4ed994
+  wheel-manylinux2014-cp37-arm64: !Task
+    ci: travis
+    template: python-wheels/travis.linux.arm64.yml
+    artifacts:
+    - pyarrow-8.0.0.dev1124-cp37-cp37m-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
+    params:
+      python_version: '3.7'
+      manylinux_version: '2014'
+    branch: build-32-travis-wheel-manylinux2014-cp37-arm64
+    commit: 01f8474109d0880f4e1bea0a5835a7583f809e6d
+  verify-rc-source-ruby-linux-ubuntu-22.04-amd64: !Task
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '22.04'
+      target: ruby
+      distro: ubuntu
+
+    branch: build-32-github-verify-rc-source-ruby-linux-ubuntu-22.04-amd64
+    commit: 1acb02feaf2b96306901a6539c25603a57668c3c
+  example-cpp-minimal-build-static-system-dependency: !Task
+    ci: github
+    template: cpp-examples/github.linux.yml
+    artifacts: []
+    params:
+      type: minimal_build
+      run: static-system-dependency
+    branch: build-32-github-example-cpp-minimal-build-static-system-dependency
+    commit: 18f6f3766634fcae23c0c2d1794a577bdcec276e
+  conda-linux-gcc-py38-ppc64le: !Task
+    ci: azure
+    template: conda-recipes/azure.linux.yml
+    artifacts:
+    - arrow-cpp-8.0.0.dev1124-py38(h[a-z0-9]+)_0_cpu.tar.bz2
+    - pyarrow-8.0.0.dev1124-py38(h[a-z0-9]+)_0_cpu.tar.bz2
+    params:
+      config: linux_ppc64le_numpy1.18python3.8.____cpython
+    branch: build-32-azure-conda-linux-gcc-py38-ppc64le
+    commit: 053657c5cedc8703b314a2774e14d42addfeb53d
+  verify-rc-source-go-linux-ubuntu-18.04-amd64: !Task
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '18.04'
+      target: go
+      distro: ubuntu
+    branch: build-32-github-verify-rc-source-go-linux-ubuntu-18.04-amd64
+    commit: 2a3ab373af871339107c120f9c2b05543ee6bff5
+  wheel-windows-cp310-amd64: !Task
+    ci: github
+    template: python-wheels/github.windows.yml
+    artifacts:
+    - pyarrow-8.0.0.dev1124-cp310-cp310-win_amd64.whl
+    params:
+      python_version: '3.10'
+    branch: build-32-github-wheel-windows-cp310-amd64
+    commit: 9f2a25ea050cd271ca113749630ff47533c6109a
+  verify-rc-source-cpp-linux-conda-latest-amd64: !Task
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        CONDA: latest
+      target: cpp
+      distro: conda
+    branch: build-32-github-verify-rc-source-cpp-linux-conda-latest-amd64
+    commit: cc2dca326aa04132ec185ab19036763aa3b2b41c
+  wheel-macos-mavericks-cp39-amd64: !Task
+    ci: github
+    template: python-wheels/github.osx.amd64.yml
+    artifacts:
+    - pyarrow-8.0.0.dev1124-cp39-cp39-macosx_10_9_x86_64.whl
+    params:
+      python_version: '3.9'
+      macos_deployment_target: '10.9'
+      arrow_s3: OFF
+      arrow_gcs: OFF
+    branch: build-32-github-wheel-macos-mavericks-cp39-amd64
+    commit: dfd843d94b7666ea0286b4109dd1bcd155853b26
+  wheel-macos-high-sierra-cp310-amd64: !Task
+    ci: github
+    template: python-wheels/github.osx.amd64.yml
+    artifacts:
+    - pyarrow-8.0.0.dev1124-cp310-cp310-macosx_10_13_x86_64.whl
+    params:
+      python_version: '3.10'
+      macos_deployment_target: '10.13'
+      arrow_s3: ON
+      arrow_gcs: ON
+    branch: build-32-github-wheel-macos-high-sierra-cp310-amd64
+    commit: b5e4fc3eb0c983946a539bf34414ac3eeb1cdfe8
+  verify-rc-source-csharp-linux-ubuntu-18.04-amd64: !Task
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '18.04'
+      target: csharp
+      distro: ubuntu
+    branch: build-32-github-verify-rc-source-csharp-linux-ubuntu-18.04-amd64
+    commit: 4059cd0cbc3d941ddc4525d6109c471c24041618
+  conda-linux-gcc-py37-cpu-r41: !Task
+    ci: azure
+    template: conda-recipes/azure.linux.yml
+    artifacts:
+    - arrow-cpp-8.0.0.dev1124-py37(h[a-z0-9]+)_0_cpu.tar.bz2
+    - pyarrow-8.0.0.dev1124-py37(h[a-z0-9]+)_0_cpu.tar.bz2
+    params:
+      config: linux_64_c_compiler_version9cuda_compiler_versionNonecxx_compiler_version9numpy1.18python3.7.____cpython
+      r_config: linux_64_r_base4.1
+    branch: build-32-azure-conda-linux-gcc-py37-cpu-r41
+    commit: aafabbc872589de836ee15984863aeeb7561bb65
+  wheel-manylinux2014-cp310-arm64: !Task
+    ci: travis
+    template: python-wheels/travis.linux.arm64.yml
+    artifacts:
+    - pyarrow-8.0.0.dev1124-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
+    params:
+      python_version: '3.10'
+      manylinux_version: '2014'
+    branch: build-32-travis-wheel-manylinux2014-cp310-arm64
+    commit: 895176f25789a1de57bd927b709e219afd5cba5a
+  centos-9-stream-amd64: !Task
+    ci: github
+    template: linux-packages/github.linux.amd64.yml
+    artifacts:
+    - apache-arrow-release-8.0.0.dev1124-1.[a-z0-9]+.noarch.rpm
+    - apache-arrow-release-8.0.0.dev1124-1.[a-z0-9]+.src.rpm
+    - arrow-dataset-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-dataset-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-dataset-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-dataset-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-dataset-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-dataset-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-dataset-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-debugsource-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-sql-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-sql-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-sql-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-sql-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-sql-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-sql-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-sql-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-python-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-python-flight-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-python-flight-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-python-flight-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-python-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-python-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-8.0.0.dev1124-1.[a-z0-9]+.src.rpm
+    - gandiva-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - gandiva-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - gandiva-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - gandiva[0-9]+-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - gandiva[0-9]+-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - gandiva[0-9]+-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - gandiva[0-9]+-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet[0-9]+-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet[0-9]+-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet[0-9]+-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet[0-9]+-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma[0-9]+-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma[0-9]+-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma[0-9]+-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma[0-9]+-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-store-server-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-store-server-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    params:
+      target: centos-9-stream
+      task_namespace: yum
+      upload_extensions:
+      - .rpm
+    branch: build-32-github-centos-9-stream-amd64
+    commit: 4fd71db78a005ffce56d73ba4121db93d30a428c
+  conda-linux-gcc-py38-arm64: !Task
+    ci: azure
+    template: conda-recipes/azure.linux.yml
+    artifacts:
+    - arrow-cpp-8.0.0.dev1124-py38(h[a-z0-9]+)_0_cpu.tar.bz2
+    - pyarrow-8.0.0.dev1124-py38(h[a-z0-9]+)_0_cpu.tar.bz2
+    params:
+      config: linux_aarch64_numpy1.18python3.8.____cpython
+    branch: build-32-azure-conda-linux-gcc-py38-arm64
+    commit: c47fd85a2da504cdd3cf4d5b3194853e2fe3b456
+  wheel-manylinux2014-cp38-arm64: !Task
+    ci: travis
+    template: python-wheels/travis.linux.arm64.yml
+    artifacts:
+    - pyarrow-8.0.0.dev1124-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
+    params:
+      python_version: '3.8'
+      manylinux_version: '2014'
+    branch: build-32-travis-wheel-manylinux2014-cp38-arm64
+    commit: 20412ba8d0234b8ef2cd0261bc268982830f2651
+  ubuntu-focal-arm64: !Task
+    ci: travis
+    template: linux-packages/travis.linux.arm64.yml
+    artifacts:
+    - gir1.2-arrow-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-arrow-dataset-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-arrow-flight-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-arrow-flight-sql-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-gandiva-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-parquet-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-dataset-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-dataset900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-flight-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-flight-sql-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-flight-sql900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-flight900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-python-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-python-flight-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-python-flight900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-python-flight900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-python900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-python900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libgandiva-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libgandiva900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libparquet-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libparquet900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    params:
+      target: ubuntu-focal-arm64
+      task_namespace: apt
+      upload_extensions:
+      - .ddeb
+      - .deb
+      - .debian.tar.xz
+      - .dsc
+      - .orig.tar.gz
+    branch: build-32-travis-ubuntu-focal-arm64
+    commit: d1be51880c0751387cc891fdd69b002e15b9358c
+  test-conda-python-3.8: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        PYTHON: '3.8'
+      image: conda-python
+    branch: build-32-github-test-conda-python-3.8
+    commit: fe2d93f7fa656e7479a27497b7ae9554925028d1
+  wheel-windows-cp37-amd64: !Task
+    ci: github
+    template: python-wheels/github.windows.yml
+    artifacts:
+    - pyarrow-8.0.0.dev1124-cp37-cp37m-win_amd64.whl
+    params:
+      python_version: '3.7'
+    branch: build-32-github-wheel-windows-cp37-amd64
+    commit: d0826cd733bfcee21406bd3eb6f88d4557ba5ace
+  test-r-linux-valgrind: !Task
+    ci: azure
+    template: docker-tests/azure.linux.yml
+    artifacts: []
+    params:
+      env:
+        ARROW_R_DEV: 'TRUE'
+        UBUNTU: 18.04
+      image: ubuntu-r-valgrind
+
+    branch: build-32-azure-test-r-linux-valgrind
+    commit: b86066f3526aea966f6fb89f8ed183b661dfdabc
+  verify-rc-source-java-linux-ubuntu-20.04-amd64: !Task
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '20.04'
+      target: java
+      distro: ubuntu
+    branch: build-32-github-verify-rc-source-java-linux-ubuntu-20.04-amd64
+    commit: 7f5503f50bb675a49b01ab75f4543c4a177ccbcf
+  verify-rc-source-windows: !Task
+    ci: github
+    template: verify-rc/github.win.yml
+    artifacts: []
+    params:
+      env:
+        PYARROW_TEST_GDB: OFF
+      script: verify-release-candidate.bat
+
+    branch: build-32-github-verify-rc-source-windows
+    commit: 8cf48ed5a7703a4ae64ac5020a7c4c723f31dae6
+  test-ubuntu-22.04-cpp: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '22.04'
+      image: ubuntu-cpp
+
+    branch: build-32-github-test-ubuntu-22.04-cpp
+    commit: 7e8f842e2e92011935485fe5ca5715492c33d509
+  test-conda-python-3.7-spark-v3.1.2: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        PYTHON: '3.7'
+        SPARK: v3.1.2
+        TEST_PYARROW_ONLY: 'false'
+      # use the branch-3.0 of spark, so prevent reusing any layers
+      flags: --no-leaf-cache
+      image: conda-python-spark
+      fetch_depth: 0
+    branch: build-32-github-test-conda-python-3.7-spark-v3.1.2
+    commit: e0a2a153525656d39c55ec362f136241a0a5afc7
+  test-conda-python-3.7-hdfs-2.9.2: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        PYTHON: 3.7
+        HDFS: 2.9.2
+      image: conda-python-hdfs
+    branch: build-32-github-test-conda-python-3.7-hdfs-2.9.2
+    commit: 92c0af7347e6aa33774a2552527b89a9d5416ba8
+  test-ubuntu-18.04-cpp: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '18.04'
+      image: ubuntu-cpp
+    branch: build-32-github-test-ubuntu-18.04-cpp
+    commit: b10aae8a49edb02fb94c8e60549e39a3792a5835
+  verify-rc-source-java-linux-almalinux-8-amd64: !Task
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        ALMALINUX: '8'
+      target: java
+      distro: almalinux
+    branch: build-32-github-verify-rc-source-java-linux-almalinux-8-amd64
+    commit: f09c99e7dac218a202aac0a5723926cee16c9b7a
+  conda-win-vs2017-py37-r41: !Task
+    ci: azure
+    template: conda-recipes/azure.win.yml
+    artifacts:
+    - arrow-cpp-8.0.0.dev1124-py37(h[a-z0-9]+)_0_cpu.tar.bz2
+    - pyarrow-8.0.0.dev1124-py37(h[a-z0-9]+)_0_cpu.tar.bz2
+    params:
+      config: win_64_cuda_compiler_versionNonenumpy1.18python3.7.____cpython
+      r_config: win_64_r_base4.0
+    branch: build-32-azure-conda-win-vs2017-py37-r41
+    commit: 3547e6e32145e3088e0b3256df62bda474b42345
+  test-conda-python-3.7-pandas-0.24: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        PYTHON: '3.7'
+        PANDAS: '0.24'
+        NUMPY: '1.19'
+      image: conda-python-pandas
+    branch: build-32-github-test-conda-python-3.7-pandas-0.24
+    commit: 8f50bcd462da9c60db198c7b6b6bb39a1ba39714
+  test-fedora-r-clang-sanitizer: !Task
+    ci: azure
+    template: docker-tests/azure.linux.yml
+    artifacts: []
+    params:
+      env:
+        R_PRUNE_DEPS: true
+      image: fedora-r-clang-sanitizer
+
+    branch: build-32-azure-test-fedora-r-clang-sanitizer
+    commit: c05df70dc4cd9ace271b65d1416caecd803414b1
+  almalinux-9-arm64: !Task
+    ci: travis
+    template: linux-packages/travis.linux.arm64.yml
+    artifacts:
+    - arrow-dataset-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-dataset-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-dataset-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-dataset-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-dataset-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-dataset-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-dataset-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-debugsource-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-sql-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-sql-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-sql-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-sql-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-sql-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-sql-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-sql-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-python-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-python-flight-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-python-flight-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-python-flight-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-python-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-python-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet[0-9]+-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet[0-9]+-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet[0-9]+-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet[0-9]+-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma[0-9]+-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma[0-9]+-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma[0-9]+-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma[0-9]+-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-store-server-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-store-server-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    params:
+      target: almalinux-9-aarch64
+      task_namespace: yum
+      upload_extensions:
+      - .rpm
+    branch: build-32-travis-almalinux-9-arm64
+    commit: bd39f7c1ad96763d4f34a4db27cadf687a42d4af
+  test-debian-11-python-3: !Task
+    ci: azure
+    template: docker-tests/azure.linux.yml
+    artifacts: []
+    params:
+      env:
+        DEBIAN: 11
+      image: debian-python
+
+    branch: build-32-azure-test-debian-11-python-3
+    commit: cfb5306ea54f733d4c1d1b54259a9713787fabbd
+  verify-rc-source-cpp-macos-arm64: !Task
+    ci: github
+    template: verify-rc/github.macos.arm64.yml
+    artifacts: []
+    params:
+      env:
+        ARROW_PLASMA: 0
+        ARROW_FLIGHT: 0
+        ARROW_GANDIVA: 0
+        TEST_INTEGRATION_JAVA: 0
+        PYTEST_ADDOPTS: -k 'not test_cancellation'
+      target: cpp
+      github_runner: [self-hosted, macOS, arm64]
+    branch: build-32-github-verify-rc-source-cpp-macos-arm64
+    commit: c6bb392ed5b8bc2b140de8e9a6fb8086f32fd8d5
+  test-conda-python-3.9: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        PYTHON: '3.9'
+      image: conda-python
+    branch: build-32-github-test-conda-python-3.9
+    commit: 669261b65e6c55a7ed9c9db0f0674e30264a6971
+  verify-rc-source-ruby-linux-almalinux-8-amd64: !Task
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        ALMALINUX: '8'
+      target: ruby
+      distro: almalinux
+
+    branch: build-32-github-verify-rc-source-ruby-linux-almalinux-8-amd64
+    commit: cf4e4bc157aa27eb179e180e3babc05fe7142674
+  verify-rc-source-go-linux-almalinux-8-amd64: !Task
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        ALMALINUX: '8'
+      target: go
+      distro: almalinux
+    branch: build-32-github-verify-rc-source-go-linux-almalinux-8-amd64
+    commit: a561c82147b17bd043b650fd5e1a32af0edda1fa
+  verify-rc-source-ruby-linux-conda-latest-amd64: !Task
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        CONDA: latest
+      target: ruby
+      distro: conda
+
+    branch: build-32-github-verify-rc-source-ruby-linux-conda-latest-amd64
+    commit: 0661b6aa57a48f7527ebfebccf71a61c18fd986d
+  verify-rc-source-csharp-macos-arm64: !Task
+    ci: github
+    template: verify-rc/github.macos.arm64.yml
+    artifacts: []
+    params:
+      env:
+        ARROW_PLASMA: 0
+        ARROW_FLIGHT: 0
+        ARROW_GANDIVA: 0
+        TEST_INTEGRATION_JAVA: 0
+        PYTEST_ADDOPTS: -k 'not test_cancellation'
+      target: csharp
+      github_runner: [self-hosted, macOS, arm64]
+    branch: build-32-github-verify-rc-source-csharp-macos-arm64
+    commit: e8960117c48b872da1a16a80b161e7a806fc01d4
+  conda-osx-clang-py310: !Task
+    ci: azure
+    template: conda-recipes/azure.osx.yml
+    artifacts:
+    - arrow-cpp-8.0.0.dev1124-py310(h[a-z0-9]+)_0_cpu.tar.bz2
+    - pyarrow-8.0.0.dev1124-py310(h[a-z0-9]+)_0_cpu.tar.bz2
+    params:
+      config: osx_64_numpy1.21python3.10.____cpython
+    branch: build-32-azure-conda-osx-clang-py310
+    commit: 332c4794b497f6b589fa0c7644f6d4df0317302c
+  test-ubuntu-20.04-cpp-17: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: 20.04
+      flags: -e CMAKE_ARGS=-DCMAKE_CXX_STANDARD=17
+      image: ubuntu-cpp
+
+    branch: build-32-github-test-ubuntu-20.04-cpp-17
+    commit: 3af6d065cf7c716c4e2f7221619772636f8bd9d5
+  verify-rc-source-go-linux-ubuntu-22.04-amd64: !Task
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '22.04'
+      target: go
+      distro: ubuntu
+    branch: build-32-github-verify-rc-source-go-linux-ubuntu-22.04-amd64
+    commit: 5ef54ecff5fe0120281bcdc913e27dd837a5ee97
+  verify-rc-source-csharp-macos-amd64: !Task
+    ci: github
+    template: verify-rc/github.macos.amd64.yml
+    artifacts: []
+    params:
+      target: csharp
+      github_runner: macos-10.15
+    branch: build-32-github-verify-rc-source-csharp-macos-amd64
+    commit: f4f57cd5ff7f8d4c4e042d369bd22f8eea503961
+  conda-linux-gcc-py310-arm64: !Task
+    ci: azure
+    template: conda-recipes/azure.linux.yml
+    artifacts:
+    - arrow-cpp-8.0.0.dev1124-py310(h[a-z0-9]+)_0_cpu.tar.bz2
+    - pyarrow-8.0.0.dev1124-py310(h[a-z0-9]+)_0_cpu.tar.bz2
+    params:
+      config: linux_aarch64_numpy1.21python3.10.____cpython
+    branch: build-32-azure-conda-linux-gcc-py310-arm64
+    commit: eee3dcfad4bd990d86bc8a4734b752f57a95b30e
+  conda-osx-clang-py38: !Task
+    ci: azure
+    template: conda-recipes/azure.osx.yml
+    artifacts:
+    - arrow-cpp-8.0.0.dev1124-py38(h[a-z0-9]+)_0_cpu.tar.bz2
+    - pyarrow-8.0.0.dev1124-py38(h[a-z0-9]+)_0_cpu.tar.bz2
+    params:
+      config: osx_64_numpy1.18python3.8.____cpython
+    branch: build-32-azure-conda-osx-clang-py38
+    commit: 7419202394321dce6705f14a83f5cddfbaa1f19a
+  verify-rc-source-python-linux-ubuntu-18.04-amd64: !Task
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '18.04'
+      target: python
+      distro: ubuntu
+    branch: build-32-github-verify-rc-source-python-linux-ubuntu-18.04-amd64
+    commit: 546e0cfec610c5b4e94ae127958c37c99555d522
+  r-binary-packages: !Task
+    ci: github
+    template: r/github.packages.yml
+    artifacts:
+    - r-lib__libarrow__bin__windows__arrow-[0-9\.]+\.zip
+    - r-lib__libarrow__bin__centos-7__arrow-[0-9\.]+\.zip
+    - r-lib__libarrow__bin__ubuntu-18.04__arrow-[0-9\.]+\.zip
+    - r-lib__libarrow__bin__ubuntu-22.04__arrow-[0-9\.]+\.zip
+    - r-pkg__bin__windows__contrib__4.1__arrow_[0-9\.]+\.zip
+    - r-pkg__bin__windows__contrib__4.2__arrow_[0-9\.]+\.zip
+    - r-pkg__bin__macosx__contrib__4.1__arrow_[0-9\.]+\.tgz
+    - r-pkg__bin__macosx__contrib__4.2__arrow_[0-9\.]+\.tgz
+    - r-pkg__src__contrib__arrow_[0-9\.]+\.tar\.gz
+    params: {}
+    branch: build-32-github-r-binary-packages
+    commit: e5ac5125d3593248e3c200663accf27e503d83f0
+  verify-rc-source-python-linux-ubuntu-20.04-amd64: !Task
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '20.04'
+      target: python
+      distro: ubuntu
+    branch: build-32-github-verify-rc-source-python-linux-ubuntu-20.04-amd64
+    commit: 549ddb27c5f6ffeacec8604b70ea66923744a358
+  test-conda-python-3.8-spark-v3.2.0: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        PYTHON: '3.8'
+        SPARK: v3.2.0
+        TEST_PYARROW_ONLY: 'false'
+      # use the branch-3.0 of spark, so prevent reusing any layers
+      flags: --no-leaf-cache
+      image: conda-python-spark
+      fetch_depth: 0
+    branch: build-32-github-test-conda-python-3.8-spark-v3.2.0
+    commit: 238d541c00ebcfac7e5009de074fd3f26bcfda33
+  centos-7-amd64: !Task
+    ci: github
+    template: linux-packages/github.linux.amd64.yml
+    artifacts:
+    - apache-arrow-release-8.0.0.dev1124-1.[a-z0-9]+.noarch.rpm
+    - apache-arrow-release-8.0.0.dev1124-1.[a-z0-9]+.src.rpm
+    - arrow-dataset-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-dataset-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-dataset-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-dataset-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-dataset-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-python-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-python-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-8.0.0.dev1124-1.[a-z0-9]+.src.rpm
+    - parquet-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet[0-9]+-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet[0-9]+-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma[0-9]+-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma[0-9]+-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-store-server-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    params:
+      target: centos-7
+      task_namespace: yum
+      upload_extensions:
+      - .rpm
+    branch: build-32-github-centos-7-amd64
+    commit: 4be266b1d1b75b94678a445eb76be692efc13239
+  ubuntu-jammy-amd64: !Task
+    ci: github
+    template: linux-packages/github.linux.amd64.yml
+    artifacts:
+    - apache-arrow-apt-source_8.0.0.dev1124-1.debian.tar.xz
+    - apache-arrow-apt-source_8.0.0.dev1124-1.dsc
+    - apache-arrow-apt-source_8.0.0.dev1124-1_all.deb
+    - apache-arrow-apt-source_8.0.0.dev1124.orig.tar.gz
+    - apache-arrow_8.0.0.dev1124-1.debian.tar.xz
+    - apache-arrow_8.0.0.dev1124-1.dsc
+    - apache-arrow_8.0.0.dev1124.orig.tar.gz
+    - gir1.2-arrow-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-arrow-dataset-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-arrow-flight-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-arrow-flight-sql-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-gandiva-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-parquet-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-dataset-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-dataset900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-flight-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-flight-sql-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-flight-sql900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-flight900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-python-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-python-flight-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-python-flight900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-python-flight900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-python900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-python900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libgandiva-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libgandiva900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libparquet-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libparquet900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-arrow-cuda-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-plasma-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-cuda-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-cuda-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-cuda-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-cuda-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-cuda900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-cuda900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libplasma-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libplasma-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libplasma-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libplasma-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libplasma-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libplasma900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libplasma900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - plasma-store-server-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - plasma-store-server_8.0.0.dev1124-1_[a-z0-9]+.deb
+    params:
+      target: ubuntu-jammy
+      task_namespace: apt
+      upload_extensions:
+      - .ddeb
+      - .deb
+      - .debian.tar.xz
+      - .dsc
+      - .orig.tar.gz
+    branch: build-32-github-ubuntu-jammy-amd64
+    commit: 6f8b12e493b6d8c649e4bba6f40af67775136bbe
+  conda-linux-gcc-py39-ppc64le: !Task
+    ci: azure
+    template: conda-recipes/azure.linux.yml
+    artifacts:
+    - arrow-cpp-8.0.0.dev1124-py39(h[a-z0-9]+)_0_cpu.tar.bz2
+    - pyarrow-8.0.0.dev1124-py39(h[a-z0-9]+)_0_cpu.tar.bz2
+    params:
+      config: linux_ppc64le_numpy1.19python3.9.____cpython
+    branch: build-32-azure-conda-linux-gcc-py39-ppc64le
+    commit: bd0a837b678f57643339af5e547f4f751fcbabff
+  conda-linux-gcc-py310-ppc64le: !Task
+    ci: azure
+    template: conda-recipes/azure.linux.yml
+    artifacts:
+    - arrow-cpp-8.0.0.dev1124-py310(h[a-z0-9]+)_0_cpu.tar.bz2
+    - pyarrow-8.0.0.dev1124-py310(h[a-z0-9]+)_0_cpu.tar.bz2
+    params:
+      config: linux_ppc64le_numpy1.21python3.10.____cpython
+    branch: build-32-azure-conda-linux-gcc-py310-ppc64le
+    commit: bdb20043617b2242b322eb833de6353b6055404c
+  almalinux-9-amd64: !Task
+    ci: github
+    template: linux-packages/github.linux.amd64.yml
+    artifacts:
+    - apache-arrow-release-8.0.0.dev1124-1.[a-z0-9]+.noarch.rpm
+    - apache-arrow-release-8.0.0.dev1124-1.[a-z0-9]+.src.rpm
+    - arrow-dataset-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-dataset-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-dataset-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-dataset-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-dataset-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-dataset-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-dataset-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-debugsource-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-sql-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-sql-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-sql-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-sql-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-sql-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-sql-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-sql-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-python-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-python-flight-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-python-flight-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-python-flight-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-python-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-python-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-8.0.0.dev1124-1.[a-z0-9]+.src.rpm
+    - gandiva-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - gandiva-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - gandiva-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - gandiva[0-9]+-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - gandiva[0-9]+-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - gandiva[0-9]+-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - gandiva[0-9]+-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet[0-9]+-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet[0-9]+-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet[0-9]+-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet[0-9]+-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma[0-9]+-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma[0-9]+-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma[0-9]+-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma[0-9]+-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-store-server-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-store-server-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    params:
+      target: almalinux-9
+      task_namespace: yum
+      upload_extensions:
+      - .rpm
+    branch: build-32-github-almalinux-9-amd64
+    commit: 6ccc310373522ec8e6069d22970ed1f6579154b1
+  test-r-linux-as-cran: !Task
+    ci: github
+    template: r/github.linux.cran.yml
+    artifacts: []
+    params:
+      MATRIX: ${{ matrix.r_image }}
+
+    branch: build-32-github-test-r-linux-as-cran
+    commit: 7aeb4c13a7eb9f61fc04653c10f6eff0e4e0aa93
+  debian-bookworm-arm64: !Task
+    ci: travis
+    template: linux-packages/travis.linux.arm64.yml
+    artifacts:
+    - gir1.2-arrow-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-arrow-dataset-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-arrow-flight-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-arrow-flight-sql-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-gandiva-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-parquet-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-dataset-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-dataset900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-flight-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-flight-sql-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-flight-sql900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-flight900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-python-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-python-flight-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-python-flight900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-python-flight900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-python900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-python900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libgandiva-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libgandiva900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libparquet-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libparquet900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    params:
+      target: debian-bookworm-arm64
+      task_namespace: apt
+      upload_extensions:
+      - .ddeb
+      - .deb
+      - .debian.tar.xz
+      - .dsc
+      - .orig.tar.gz
+    branch: build-32-travis-debian-bookworm-arm64
+    commit: 59b52daa5cdeae592e3715025d181898935fc835
+  ubuntu-jammy-arm64: !Task
+    ci: travis
+    template: linux-packages/travis.linux.arm64.yml
+    artifacts:
+    - gir1.2-arrow-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-arrow-dataset-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-arrow-flight-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-arrow-flight-sql-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-gandiva-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-parquet-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-dataset-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-dataset900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-flight-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-flight-sql-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-flight-sql900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-flight900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-python-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-python-flight-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-python-flight900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-python-flight900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-python900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-python900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libgandiva-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libgandiva900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libparquet-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libparquet900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    params:
+      target: ubuntu-jammy-arm64
+      task_namespace: apt
+      upload_extensions:
+      - .ddeb
+      - .deb
+      - .debian.tar.xz
+      - .dsc
+      - .orig.tar.gz
+    branch: build-32-travis-ubuntu-jammy-arm64
+    commit: eed8e334578325b9ae5c7d9eb065f5016ec29efe
+  verify-rc-source-integration-linux-conda-latest-amd64: !Task
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        CONDA: latest
+      target: integration
+      distro: conda
+    branch: build-32-github-verify-rc-source-integration-linux-conda-latest-amd64
+    commit: e1dc0a9eb4fe910f384b59d7d3cccf259996e234
+  test-conda-python-3.9-spark-master: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        PYTHON: '3.9'
+        SPARK: master
+        TEST_PYARROW_ONLY: 'false'
+      # use the branch-3.0 of spark, so prevent reusing any layers
+      flags: --no-leaf-cache
+      image: conda-python-spark
+      fetch_depth: 0
+
+    branch: build-32-github-test-conda-python-3.9-spark-master
+    commit: 4d294072d5cdaa50c2345ce23a1e14f529ce02f8
+  wheel-macos-big-sur-cp39-arm64: !Task
+    ci: github
+    template: python-wheels/github.osx.arm64.yml
+    artifacts:
+    - pyarrow-8.0.0.dev1124-cp39-cp39-macosx_11_0_arm64.whl
+    params:
+      arch: arm64
+      python_version: '3.9'
+      macos_deployment_target: '11.0'
+    branch: build-32-github-wheel-macos-big-sur-cp39-arm64
+    commit: 5c1643f337e49bc5f6b69f8f9e7573afcbd9e284
+  conda-osx-arm64-clang-py38: !Task
+    ci: azure
+    template: conda-recipes/azure.osx.yml
+    artifacts:
+    - arrow-cpp-8.0.0.dev1124-py38(h[a-z0-9]+)_0_cpu.tar.bz2
+    - pyarrow-8.0.0.dev1124-py38(h[a-z0-9]+)_0_cpu.tar.bz2
+    params:
+      config: osx_arm64_numpy1.19python3.8.____cpython
+    branch: build-32-azure-conda-osx-arm64-clang-py38
+    commit: 5430df59d8381739e2831bb98686f8711441fd36
+  test-debian-11-cpp-amd64: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        ARCH: amd64
+        DEBIAN: '11'
+      image: debian-cpp
+
+    branch: build-32-github-test-debian-11-cpp-amd64
+    commit: 7cafbf5920535a6fde1546047182c636b23b570f
+  verify-rc-source-integration-linux-almalinux-8-amd64: !Task
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        ALMALINUX: '8'
+      target: integration
+      distro: almalinux
+    branch: build-32-github-verify-rc-source-integration-linux-almalinux-8-amd64
+    commit: 18e53e53ce567159c1787347ae3bb3bf9b63ac4f
+  verify-rc-source-js-linux-ubuntu-18.04-amd64: !Task
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '18.04'
+      target: js
+      distro: ubuntu
+    branch: build-32-github-verify-rc-source-js-linux-ubuntu-18.04-amd64
+    commit: 0dd035dc15be3a2e6cbd1b3f26916e3b226d179e
+  conda-linux-gcc-py38-cuda: !Task
+    ci: azure
+    template: conda-recipes/azure.linux.yml
+    artifacts:
+    - arrow-cpp-8.0.0.dev1124-py38(h[a-z0-9]+)_0_cuda.tar.bz2
+    - pyarrow-8.0.0.dev1124-py38(h[a-z0-9]+)_0_cuda.tar.bz2
+    params:
+      config: linux_64_c_compiler_version7cuda_compiler_version10.2cxx_compiler_version7numpy1.18python3.8.____cpython
+    branch: build-32-azure-conda-linux-gcc-py38-cuda
+    commit: 11c2d58e9ff35b89ab2f2d720726d358a0de8ecc
+  verify-rc-source-js-linux-almalinux-8-amd64: !Task
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        ALMALINUX: '8'
+      target: js
+      distro: almalinux
+    branch: build-32-github-verify-rc-source-js-linux-almalinux-8-amd64
+    commit: 0295bfc9219c6fc7296349ab2147601921589d44
+  wheel-macos-high-sierra-cp39-amd64: !Task
+    ci: github
+    template: python-wheels/github.osx.amd64.yml
+    artifacts:
+    - pyarrow-8.0.0.dev1124-cp39-cp39-macosx_10_13_x86_64.whl
+    params:
+      python_version: '3.9'
+      macos_deployment_target: '10.13'
+      arrow_s3: ON
+      arrow_gcs: ON
+    branch: build-32-github-wheel-macos-high-sierra-cp39-amd64
+    commit: 816f758b1ef4c861db00861beb94338b08460240
+  homebrew-r-brew: !Task
+    ci: github
+    template: r/github.macos.brew.yml
+    artifacts: []
+    params:
+      formula: apache-arrow.rb
+
+  ############################## Arrow JAR's ##################################
+
+    branch: build-32-github-homebrew-r-brew
+    commit: 9efbc94a7ac7d40f0bd25bfe06d18a636be76690
+  wheel-macos-high-sierra-cp37-amd64: !Task
+    ci: github
+    template: python-wheels/github.osx.amd64.yml
+    artifacts:
+    - pyarrow-8.0.0.dev1124-cp37-cp37m-macosx_10_13_x86_64.whl
+    params:
+      python_version: '3.7'
+      macos_deployment_target: '10.13'
+      arrow_s3: ON
+      arrow_gcs: ON
+    branch: build-32-github-wheel-macos-high-sierra-cp37-amd64
+    commit: 1fd799121f74d1ad970132bb2faa05533878673c
+  verify-rc-source-ruby-linux-ubuntu-18.04-amd64: !Task
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '18.04'
+      target: ruby
+      distro: ubuntu
+
+    branch: build-32-github-verify-rc-source-ruby-linux-ubuntu-18.04-amd64
+    commit: 21882d7ac1642df1da87d9250979d2de11ef0eae
+  verify-rc-source-ruby-linux-ubuntu-20.04-amd64: !Task
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '20.04'
+      target: ruby
+      distro: ubuntu
+
+    branch: build-32-github-verify-rc-source-ruby-linux-ubuntu-20.04-amd64
+    commit: c983fafd747b3491734092f5902296c573f70db2
+  conda-osx-arm64-clang-py39: !Task
+    ci: azure
+    template: conda-recipes/azure.osx.yml
+    artifacts:
+    - arrow-cpp-8.0.0.dev1124-py39(h[a-z0-9]+)_0_cpu.tar.bz2
+    - pyarrow-8.0.0.dev1124-py39(h[a-z0-9]+)_0_cpu.tar.bz2
+    params:
+      config: osx_arm64_numpy1.19python3.9.____cpython
+    branch: build-32-azure-conda-osx-arm64-clang-py39
+    commit: 6645b464d8f4a75b16397449a6647f0602085531
+  test-r-install-local: !Task
+    ci: github
+    template: r/github.macos-linux.local.yml
+    artifacts: []
+    params: {}
+    branch: build-32-github-test-r-install-local
+    commit: 0a206d1423b8874eb02a93e9de970fde36012601
+  test-ubuntu-20.04-python-3: !Task
+    ci: azure
+    template: docker-tests/azure.linux.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: 20.04
+      image: ubuntu-python
+
+    branch: build-32-azure-test-ubuntu-20.04-python-3
+    commit: bb77d7cf41d7b434dd8cbabea530c63b1cfc95ce
+  test-debian-11-go-1.16: !Task
+    ci: azure
+    template: docker-tests/azure.linux.yml
+    artifacts: []
+    params:
+      env:
+        DEBIAN: 11
+        GO: 1.16
+      image: debian-go
+
+    branch: build-32-azure-test-debian-11-go-1.16
+    commit: 1f805bc299138717c3a082e5ddbbbeb47cde3de6
+  verify-rc-source-python-linux-conda-latest-amd64: !Task
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        CONDA: latest
+      target: python
+      distro: conda
+    branch: build-32-github-verify-rc-source-python-linux-conda-latest-amd64
+    commit: 99092db5195406dab82dddcf5e1c94cbf83efc9a
+  verify-rc-source-integration-macos-arm64: !Task
+    ci: github
+    template: verify-rc/github.macos.arm64.yml
+    artifacts: []
+    params:
+      env:
+        ARROW_PLASMA: 0
+        ARROW_FLIGHT: 0
+        ARROW_GANDIVA: 0
+        TEST_INTEGRATION_JAVA: 0
+        PYTEST_ADDOPTS: -k 'not test_cancellation'
+      target: integration
+      github_runner: [self-hosted, macOS, arm64]
+    branch: build-32-github-verify-rc-source-integration-macos-arm64
+    commit: 40a4f8089ec4b5e5ad6415bccb03a5224f0ddcc0
+  test-build-vcpkg-win: !Task
+    ci: github
+    template: vcpkg-tests/github.windows.yml
+    artifacts: []
+    params: {}
+    branch: build-32-github-test-build-vcpkg-win
+    commit: 8186d1d2a343a04cdf3a62a5f12717cc83e00a9f
+  test-r-versions: !Task
+    ci: github
+    template: r/github.linux.versions.yml
+    artifacts: []
+    params:
+      MATRIX: ${{ matrix.r_version }}
+
+    branch: build-32-github-test-r-versions
+    commit: 3ee3b6ec18fd2b1f42b4620d6de4e00477e35dff
+  verify-rc-source-cpp-linux-ubuntu-18.04-amd64: !Task
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '18.04'
+      target: cpp
+      distro: ubuntu
+    branch: build-32-github-verify-rc-source-cpp-linux-ubuntu-18.04-amd64
+    commit: 4ca8381c27ce87646ce18e8502927102c0f8c93c
+  verify-rc-source-js-macos-arm64: !Task
+    ci: github
+    template: verify-rc/github.macos.arm64.yml
+    artifacts: []
+    params:
+      env:
+        ARROW_PLASMA: 0
+        ARROW_FLIGHT: 0
+        ARROW_GANDIVA: 0
+        TEST_INTEGRATION_JAVA: 0
+        PYTEST_ADDOPTS: -k 'not test_cancellation'
+      target: js
+      github_runner: [self-hosted, macOS, arm64]
+    branch: build-32-github-verify-rc-source-js-macos-arm64
+    commit: 3b7fb30feb4049f75509ae74f72acbb2d483a9f5
+  test-r-dev-duckdb: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        R_DUCKDB_DEV: true
+      image: ubuntu-r-only-r
+
+    branch: build-32-github-test-r-dev-duckdb
+    commit: f9ea9c472495a3b83f56ac7c29464fa86d89da51
+  test-r-arrow-backwards-compatibility: !Task
+    ci: github
+    template: r/github.linux.arrow.version.back.compat.yml
+    artifacts: []
+    params: {}
+    branch: build-32-github-test-r-arrow-backwards-compatibility
+    commit: 540c81208374e1911926a7730596b119ab328d35
+  conda-linux-gcc-py310-cuda: !Task
+    ci: azure
+    template: conda-recipes/azure.linux.yml
+    artifacts:
+    - arrow-cpp-8.0.0.dev1124-py310(h[a-z0-9]+)_0_cuda.tar.bz2
+    - pyarrow-8.0.0.dev1124-py310(h[a-z0-9]+)_0_cuda.tar.bz2
+    params:
+      config: linux_64_c_compiler_version7cuda_compiler_version10.2cxx_compiler_version7numpy1.21python3.10.____cpython
+    branch: build-32-azure-conda-linux-gcc-py310-cuda
+    commit: 8ef353e98b7c5cac3351e1180ddfc369c3ed67cc
+  conda-osx-arm64-clang-py310: !Task
+    ci: azure
+    template: conda-recipes/azure.osx.yml
+    artifacts:
+    - arrow-cpp-8.0.0.dev1124-py310(h[a-z0-9]+)_0_cpu.tar.bz2
+    - pyarrow-8.0.0.dev1124-py310(h[a-z0-9]+)_0_cpu.tar.bz2
+    params:
+      config: osx_arm64_numpy1.21python3.10.____cpython
+    branch: build-32-azure-conda-osx-arm64-clang-py310
+    commit: 6c5ea104f9cd94864f88a76959290c86cf3766bf
+  conan-maximum: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      flags: >-
+        -e ARROW_CONAN_PARQUET=True
+        -e ARROW_CONAN_WITH_BROTLI=True
+        -e ARROW_CONAN_WITH_GLOG=True
+        -e ARROW_CONAN_WITH_JEMALLOC=True
+        -e ARROW_CONAN_WITH_LZ4=True
+        -e ARROW_CONAN_WITH_SNAPPY=True
+      image: conan
+
+  ########################### Python Minimal ############################
+
+    branch: build-32-github-conan-maximum
+    commit: aae0b2e54f45cb9839f1d6940222aed1974cc0f3
+  ubuntu-bionic-arm64: !Task
+    ci: travis
+    template: linux-packages/travis.linux.arm64.yml
+    artifacts:
+    - gir1.2-arrow-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-arrow-dataset-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-arrow-flight-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-arrow-flight-sql-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-gandiva-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-parquet-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-dataset-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-dataset900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-flight-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-flight-sql-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-flight-sql900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-flight900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-python-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-python-flight-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-python-flight900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-python-flight900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-python900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-python900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libgandiva-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libgandiva900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libparquet-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libparquet900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    params:
+      target: ubuntu-bionic-arm64
+      task_namespace: apt
+      upload_extensions:
+      - .ddeb
+      - .deb
+      - .debian.tar.xz
+      - .dsc
+      - .orig.tar.gz
+    branch: build-32-travis-ubuntu-bionic-arm64
+    commit: ccfacda5dafc4b46e3f908d9047a693d639ffc16
+  verify-rc-source-integration-linux-ubuntu-20.04-amd64: !Task
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '20.04'
+      target: integration
+      distro: ubuntu
+    branch: build-32-github-verify-rc-source-integration-linux-ubuntu-20.04-amd64
+    commit: 82cd5abd7b75ef5477991d1088192f2bb928205a
+  test-conda-python-3.8-pandas-nightly: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        PYTHON: '3.8'
+        PANDAS: nightly
+        NUMPY: nightly
+      # use the latest pandas release, so prevent reusing any cached layers
+      flags: --no-leaf-cache
+      image: conda-python-pandas
+    branch: build-32-github-test-conda-python-3.8-pandas-nightly
+    commit: 317e8861af773ced040c1993d852f5f92539f6f6
+  verify-rc-source-csharp-linux-conda-latest-amd64: !Task
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        CONDA: latest
+      target: csharp
+      distro: conda
+    branch: build-32-github-verify-rc-source-csharp-linux-conda-latest-amd64
+    commit: d92dfa9c8a2b7856bf0c0a907ad61b3f9a67b5c4
+  verify-rc-source-python-macos-amd64: !Task
+    ci: github
+    template: verify-rc/github.macos.amd64.yml
+    artifacts: []
+    params:
+      target: python
+      github_runner: macos-10.15
+    branch: build-32-github-verify-rc-source-python-macos-amd64
+    commit: 1ff63df9875f44238f35ea363afad95c2e29e2fc
+  verify-rc-source-js-linux-ubuntu-22.04-amd64: !Task
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '22.04'
+      target: js
+      distro: ubuntu
+    branch: build-32-github-verify-rc-source-js-linux-ubuntu-22.04-amd64
+    commit: 9fa252538edabb0854d57f966eda37d9fe0eca20
+  wheel-macos-mavericks-cp38-amd64: !Task
+    ci: github
+    template: python-wheels/github.osx.amd64.yml
+    artifacts:
+    - pyarrow-8.0.0.dev1124-cp38-cp38-macosx_10_9_x86_64.whl
+    params:
+      python_version: '3.8'
+      macos_deployment_target: '10.9'
+      arrow_s3: OFF
+      arrow_gcs: OFF
+    branch: build-32-github-wheel-macos-mavericks-cp38-amd64
+    commit: b9a2d7de76400575877151cae829461890bcc20d
+  wheel-macos-big-sur-cp38-arm64: !Task
+    ci: github
+    template: python-wheels/github.osx.arm64.yml
+    artifacts:
+    - pyarrow-8.0.0.dev1124-cp38-cp38-macosx_11_0_arm64.whl
+    params:
+      arch: arm64
+      arrow_simd_level: DEFAULT
+      python_version: '3.8'
+      macos_deployment_target: '11.0'
+
+    branch: build-32-github-wheel-macos-big-sur-cp38-arm64
+    commit: bbc5dfbc274569560d1df909f78499c29e54d5ec
+  example-python-minimal-build-fedora-conda: !Task
+    ci: github
+    template: python-minimal-build/github.linux.yml
+    artifacts: []
+    params:
+      type: minimal_build
+      image: minimal-fedora-conda
+    branch: build-32-github-example-python-minimal-build-fedora-conda
+    commit: f08265f4e1f8c97227da75873de50b2e0286daf1
+  verify-rc-source-python-macos-conda-amd64: !Task
+    ci: github
+    template: verify-rc/github.macos.amd64.yml
+    artifacts: []
+    params:
+      target: python
+      use_conda: true
+      github_runner: macos-10.15
+
+    branch: build-32-github-verify-rc-source-python-macos-conda-amd64
+    commit: 1ed82c1656b49473c0627a0596b4c3b410a8d5ed
+  conda-linux-gcc-py37-cuda: !Task
+    ci: azure
+    template: conda-recipes/azure.linux.yml
+    artifacts:
+    - arrow-cpp-8.0.0.dev1124-py37(h[a-z0-9]+)_0_cuda.tar.bz2
+    - pyarrow-8.0.0.dev1124-py37(h[a-z0-9]+)_0_cuda.tar.bz2
+    params:
+      config: linux_64_c_compiler_version7cuda_compiler_version10.2cxx_compiler_version7numpy1.18python3.7.____cpython
+    branch: build-32-azure-conda-linux-gcc-py37-cuda
+    commit: f38dfb5e4f70bd8fd7a76b29b87db0cb093425c5
+  conda-linux-gcc-py39-cuda: !Task
+    ci: azure
+    template: conda-recipes/azure.linux.yml
+    artifacts:
+    - arrow-cpp-8.0.0.dev1124-py39(h[a-z0-9]+)_0_cuda.tar.bz2
+    - pyarrow-8.0.0.dev1124-py39(h[a-z0-9]+)_0_cuda.tar.bz2
+    params:
+      config: linux_64_c_compiler_version7cuda_compiler_version10.2cxx_compiler_version7numpy1.19python3.9.____cpython
+    branch: build-32-azure-conda-linux-gcc-py39-cuda
+    commit: a7da6dfc58aa474ef75918769434a24be15b029c
+  nuget: !Task
+    ci: github
+    template: nuget-packages/github.linux.yml
+    artifacts:
+    - Apache.Arrow.Flight.AspNetCore.8.0.0.dev1124.nupkg
+    - Apache.Arrow.Flight.AspNetCore.8.0.0.dev1124.snupkg
+    - Apache.Arrow.Flight.8.0.0.dev1124.nupkg
+    - Apache.Arrow.Flight.8.0.0.dev1124.snupkg
+    - Apache.Arrow.8.0.0.dev1124.nupkg
+    - Apache.Arrow.8.0.0.dev1124.snupkg
+    params:
+      run: ubuntu-csharp
+    branch: build-32-github-nuget
+    commit: 98c7385c6252ca8469fd1f07b16f172b2f9c30f8
+  ubuntu-bionic-amd64: !Task
+    ci: github
+    template: linux-packages/github.linux.amd64.yml
+    artifacts:
+    - apache-arrow-apt-source_8.0.0.dev1124-1.debian.tar.xz
+    - apache-arrow-apt-source_8.0.0.dev1124-1.dsc
+    - apache-arrow-apt-source_8.0.0.dev1124-1_all.deb
+    - apache-arrow-apt-source_8.0.0.dev1124.orig.tar.gz
+    - apache-arrow_8.0.0.dev1124-1.debian.tar.xz
+    - apache-arrow_8.0.0.dev1124-1.dsc
+    - apache-arrow_8.0.0.dev1124.orig.tar.gz
+    - gir1.2-arrow-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-arrow-dataset-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-arrow-flight-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-arrow-flight-sql-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-gandiva-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-parquet-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-dataset-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-dataset900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-flight-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-flight-sql-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-flight-sql900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-flight900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-python-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-python-flight-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-python-flight900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-python-flight900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-python900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-python900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libgandiva-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libgandiva900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libparquet-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libparquet900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-arrow-cuda-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-plasma-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-cuda-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-cuda-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-cuda-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-cuda-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-cuda900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-cuda900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libplasma-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libplasma-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libplasma-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libplasma-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libplasma-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libplasma900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libplasma900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - plasma-store-server-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - plasma-store-server_8.0.0.dev1124-1_[a-z0-9]+.deb
+    params:
+      target: ubuntu-bionic
+      task_namespace: apt
+      upload_extensions:
+      - .ddeb
+      - .deb
+      - .debian.tar.xz
+      - .dsc
+      - .orig.tar.gz
+    branch: build-32-github-ubuntu-bionic-amd64
+    commit: 19476da8fa6e41ee06b059e1f3b41277821e98e3
+  centos-8-stream-amd64: !Task
+    ci: github
+    template: linux-packages/github.linux.amd64.yml
+    artifacts:
+    - apache-arrow-release-8.0.0.dev1124-1.[a-z0-9]+.noarch.rpm
+    - apache-arrow-release-8.0.0.dev1124-1.[a-z0-9]+.src.rpm
+    - arrow-dataset-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-dataset-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-dataset-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-dataset-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-dataset-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-dataset-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-dataset-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-debugsource-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-sql-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-sql-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-sql-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-sql-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-sql-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-sql-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-sql-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-python-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-python-flight-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-python-flight-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-python-flight-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-python-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-python-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-8.0.0.dev1124-1.[a-z0-9]+.src.rpm
+    - gandiva-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - gandiva-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - gandiva-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - gandiva[0-9]+-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - gandiva[0-9]+-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - gandiva[0-9]+-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - gandiva[0-9]+-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet[0-9]+-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet[0-9]+-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet[0-9]+-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet[0-9]+-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma[0-9]+-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma[0-9]+-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma[0-9]+-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma[0-9]+-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-store-server-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-store-server-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    params:
+      target: centos-8-stream
+      task_namespace: yum
+      upload_extensions:
+      - .rpm
+    branch: build-32-github-centos-8-stream-amd64
+    commit: f5c2060cb59f8ca688213992a045da41af15dbe4
+  verify-rc-source-js-linux-ubuntu-20.04-amd64: !Task
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '20.04'
+      target: js
+      distro: ubuntu
+    branch: build-32-github-verify-rc-source-js-linux-ubuntu-20.04-amd64
+    commit: 079908b8d380cabc519eca8328e08a27f27918fb
+  verify-rc-source-ruby-macos-arm64: !Task
+    ci: github
+    template: verify-rc/github.macos.arm64.yml
+    artifacts: []
+    params:
+      env:
+        ARROW_PLASMA: 0
+        ARROW_FLIGHT: 0
+        ARROW_GANDIVA: 0
+        TEST_INTEGRATION_JAVA: 0
+        PYTEST_ADDOPTS: -k 'not test_cancellation'
+      target: ruby
+      github_runner: [self-hosted, macOS, arm64]
+    branch: build-32-github-verify-rc-source-ruby-macos-arm64
+    commit: c0a5be3bb6fd94e300d879610b009d70ef94ad98
+  test-skyhook-integration: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: 20.04
+      flags: -e ARROW_SKYHOOK=ON
+      image: ubuntu-cpp
+
+    branch: build-32-github-test-skyhook-integration
+    commit: c24221080ae8fc55f61ef2ad369619f465609132
+  test-r-depsource-bundled: !Task
+    ci: azure
+    template: r/azure.linux.yml
+    artifacts: []
+    params:
+      r_org: rocker
+      r_image: r-base
+      r_tag: latest
+      flags: -e ARROW_DEPENDENCY_SOURCE=BUNDLED
+
+    branch: build-32-azure-test-r-depsource-bundled
+    commit: 297b163d44362ea761569069722ac0738d09cffc
+  java-jars: !Task
+    ci: github
+    template: java-jars/github.yml
+    artifacts:
+    - arrow-algorithm-8.0.0.dev1124-javadoc.jar
+    - arrow-algorithm-8.0.0.dev1124-sources.jar
+    - arrow-algorithm-8.0.0.dev1124-tests.jar
+    - arrow-algorithm-8.0.0.dev1124.jar
+    - arrow-algorithm-8.0.0.dev1124.pom
+    - arrow-avro-8.0.0.dev1124-javadoc.jar
+    - arrow-avro-8.0.0.dev1124-sources.jar
+    - arrow-avro-8.0.0.dev1124-tests.jar
+    - arrow-avro-8.0.0.dev1124.jar
+    - arrow-avro-8.0.0.dev1124.pom
+    - arrow-c-data-8.0.0.dev1124-javadoc.jar
+    - arrow-c-data-8.0.0.dev1124-sources.jar
+    - arrow-c-data-8.0.0.dev1124-tests.jar
+    - arrow-c-data-8.0.0.dev1124.jar
+    - arrow-c-data-8.0.0.dev1124.pom
+    - arrow-compression-8.0.0.dev1124-javadoc.jar
+    - arrow-compression-8.0.0.dev1124-sources.jar
+    - arrow-compression-8.0.0.dev1124-tests.jar
+    - arrow-compression-8.0.0.dev1124.jar
+    - arrow-compression-8.0.0.dev1124.pom
+    - arrow-dataset-8.0.0.dev1124-javadoc.jar
+    - arrow-dataset-8.0.0.dev1124-sources.jar
+    - arrow-dataset-8.0.0.dev1124-tests.jar
+    - arrow-dataset-8.0.0.dev1124.jar
+    - arrow-dataset-8.0.0.dev1124.pom
+    - arrow-flight-8.0.0.dev1124.pom
+    - arrow-format-8.0.0.dev1124-javadoc.jar
+    - arrow-format-8.0.0.dev1124-sources.jar
+    - arrow-format-8.0.0.dev1124-tests.jar
+    - arrow-format-8.0.0.dev1124.jar
+    - arrow-format-8.0.0.dev1124.pom
+    - arrow-gandiva-8.0.0.dev1124-javadoc.jar
+    - arrow-gandiva-8.0.0.dev1124-sources.jar
+    - arrow-gandiva-8.0.0.dev1124-tests.jar
+    - arrow-gandiva-8.0.0.dev1124.jar
+    - arrow-gandiva-8.0.0.dev1124.pom
+    - arrow-java-root-8.0.0.dev1124-source-release.zip
+    - arrow-java-root-8.0.0.dev1124.pom
+    - arrow-jdbc-8.0.0.dev1124-javadoc.jar
+    - arrow-jdbc-8.0.0.dev1124-sources.jar
+    - arrow-jdbc-8.0.0.dev1124-tests.jar
+    - arrow-jdbc-8.0.0.dev1124.jar
+    - arrow-jdbc-8.0.0.dev1124.pom
+    - arrow-memory-core-8.0.0.dev1124-javadoc.jar
+    - arrow-memory-core-8.0.0.dev1124-sources.jar
+    - arrow-memory-core-8.0.0.dev1124-tests.jar
+    - arrow-memory-core-8.0.0.dev1124.jar
+    - arrow-memory-core-8.0.0.dev1124.pom
+    - arrow-memory-netty-8.0.0.dev1124-javadoc.jar
+    - arrow-memory-netty-8.0.0.dev1124-sources.jar
+    - arrow-memory-netty-8.0.0.dev1124-tests.jar
+    - arrow-memory-netty-8.0.0.dev1124.jar
+    - arrow-memory-netty-8.0.0.dev1124.pom
+    - arrow-memory-unsafe-8.0.0.dev1124-javadoc.jar
+    - arrow-memory-unsafe-8.0.0.dev1124-sources.jar
+    - arrow-memory-unsafe-8.0.0.dev1124-tests.jar
+    - arrow-memory-unsafe-8.0.0.dev1124.jar
+    - arrow-memory-unsafe-8.0.0.dev1124.pom
+    - arrow-memory-8.0.0.dev1124.pom
+    - arrow-orc-8.0.0.dev1124-javadoc.jar
+    - arrow-orc-8.0.0.dev1124-sources.jar
+    - arrow-orc-8.0.0.dev1124-tests.jar
+    - arrow-orc-8.0.0.dev1124.jar
+    - arrow-orc-8.0.0.dev1124.pom
+    - arrow-performance-8.0.0.dev1124-sources.jar
+    - arrow-performance-8.0.0.dev1124-tests.jar
+    - arrow-performance-8.0.0.dev1124.jar
+    - arrow-performance-8.0.0.dev1124.pom
+    - arrow-plasma-8.0.0.dev1124-javadoc.jar
+    - arrow-plasma-8.0.0.dev1124-sources.jar
+    - arrow-plasma-8.0.0.dev1124-tests.jar
+    - arrow-plasma-8.0.0.dev1124.jar
+    - arrow-plasma-8.0.0.dev1124.pom
+    - arrow-tools-8.0.0.dev1124-jar-with-dependencies.jar
+    - arrow-tools-8.0.0.dev1124-javadoc.jar
+    - arrow-tools-8.0.0.dev1124-sources.jar
+    - arrow-tools-8.0.0.dev1124-tests.jar
+    - arrow-tools-8.0.0.dev1124.jar
+    - arrow-tools-8.0.0.dev1124.pom
+    - arrow-vector-8.0.0.dev1124-javadoc.jar
+    - arrow-vector-8.0.0.dev1124-shade-format-flatbuffers.jar
+    - arrow-vector-8.0.0.dev1124-sources.jar
+    - arrow-vector-8.0.0.dev1124-tests.jar
+    - arrow-vector-8.0.0.dev1124.jar
+    - arrow-vector-8.0.0.dev1124.pom
+    - flight-core-8.0.0.dev1124-jar-with-dependencies.jar
+    - flight-core-8.0.0.dev1124-javadoc.jar
+    - flight-core-8.0.0.dev1124-shaded-ext.jar
+    - flight-core-8.0.0.dev1124-shaded.jar
+    - flight-core-8.0.0.dev1124-sources.jar
+    - flight-core-8.0.0.dev1124-tests.jar
+    - flight-core-8.0.0.dev1124.jar
+    - flight-core-8.0.0.dev1124.pom
+    - flight-grpc-8.0.0.dev1124-javadoc.jar
+    - flight-grpc-8.0.0.dev1124-sources.jar
+    - flight-grpc-8.0.0.dev1124-tests.jar
+    - flight-grpc-8.0.0.dev1124.jar
+    - flight-grpc-8.0.0.dev1124.pom
+    - flight-integration-tests-8.0.0.dev1124-jar-with-dependencies.jar
+    - flight-integration-tests-8.0.0.dev1124-javadoc.jar
+    - flight-integration-tests-8.0.0.dev1124-sources.jar
+    - flight-integration-tests-8.0.0.dev1124-tests.jar
+    - flight-integration-tests-8.0.0.dev1124.jar
+    - flight-integration-tests-8.0.0.dev1124.pom
+    - flight-sql-8.0.0.dev1124-javadoc.jar
+    - flight-sql-8.0.0.dev1124-sources.jar
+    - flight-sql-8.0.0.dev1124-tests.jar
+    - flight-sql-8.0.0.dev1124.jar
+    - flight-sql-8.0.0.dev1124.pom
+    params: {}
+    branch: build-32-github-java-jars
+    commit: 210ed677d7e127d47f00c860b55a1505cdfd7663
+  conda-osx-clang-py37-r40: !Task
+    ci: azure
+    template: conda-recipes/azure.osx.yml
+    artifacts:
+    - arrow-cpp-8.0.0.dev1124-py37(h[a-z0-9]+)_0_cpu.tar.bz2
+    - pyarrow-8.0.0.dev1124-py37(h[a-z0-9]+)_0_cpu.tar.bz2
+    params:
+      config: osx_64_numpy1.18python3.7.____cpython
+      r_config: osx_64_r_base4.0
+    branch: build-32-azure-conda-osx-clang-py37-r40
+    commit: 894c5453f8234b10e87ba8d83f344ce35dc8be39
+  verify-rc-source-go-linux-ubuntu-20.04-amd64: !Task
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '20.04'
+      target: go
+      distro: ubuntu
+    branch: build-32-github-verify-rc-source-go-linux-ubuntu-20.04-amd64
+    commit: 11ecacaa054088ccf7c9ba3bcaeb5becc6d8dfb2
+  test-r-gcc-12: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: 22.04
+        GCC_VERSION: 12
+      image: ubuntu-r-only-r
+
+    branch: build-32-github-test-r-gcc-12
+    commit: 2e632aeeff7147722191fdc3fd50c9ca8c327752
+  amazon-linux-2-arm64: !Task
+    ci: travis
+    template: linux-packages/travis.linux.arm64.yml
+    artifacts:
+    - arrow-dataset-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-dataset-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-dataset-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-dataset-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-dataset-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet[0-9]+-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet[0-9]+-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma[0-9]+-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma[0-9]+-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-store-server-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    params:
+      target: amazon-linux-2-aarch64
+      task_namespace: yum
+      upload_extensions:
+      - .rpm
+    branch: build-32-travis-amazon-linux-2-arm64
+    commit: 5c676241a9b62b0a1a488c5ee2a0a2ecf163affc
+  wheel-manylinux2014-cp310-amd64: !Task
+    ci: github
+    template: python-wheels/github.linux.amd64.yml
+    artifacts:
+    - pyarrow-8.0.0.dev1124-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+    params:
+      python_version: '3.10'
+      manylinux_version: '2014'
+    branch: build-32-github-wheel-manylinux2014-cp310-amd64
+    commit: 5a3c4a53822f823d455526c31acc0fb01f5ddbfc
+  test-r-offline-maximal: !Task
+    ci: github
+    template: r/github.linux.offline.build.yml
+    artifacts: []
+    params: {}
+    branch: build-32-github-test-r-offline-maximal
+    commit: dd8f4adda458d26094fbd4a222aef48f0bb999ea
+  verify-rc-source-go-macos-arm64: !Task
+    ci: github
+    template: verify-rc/github.macos.arm64.yml
+    artifacts: []
+    params:
+      env:
+        ARROW_PLASMA: 0
+        ARROW_FLIGHT: 0
+        ARROW_GANDIVA: 0
+        TEST_INTEGRATION_JAVA: 0
+        PYTEST_ADDOPTS: -k 'not test_cancellation'
+      target: go
+      github_runner: [self-hosted, macOS, arm64]
+    branch: build-32-github-verify-rc-source-go-macos-arm64
+    commit: ed2fff46a43037ab935b915c528ce24b60159dd2
+  test-ubuntu-ruby: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      image: ubuntu-ruby
+
+  # Use azure to run valgrind tests to prevent OOM
+    branch: build-32-github-test-ubuntu-ruby
+    commit: 142bff791222d10df68cf23fda1a8e01bab94dfd
+  test-ubuntu-20.04-cpp-thread-sanitizer: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        # clang-tools and llvm version need to be synchronized so as
+        # to have the right llvm-symbolizer version
+        CLANG_TOOLS: 11
+        LLVM: 11
+        UBUNTU: 20.04
+      image: ubuntu-cpp-thread-sanitizer
+
+    branch: build-32-github-test-ubuntu-20.04-cpp-thread-sanitizer
+    commit: 8579a4cd462c81b296ac4cf491594857ad08403f
+  conda-win-vs2017-py310: !Task
+    ci: azure
+    template: conda-recipes/azure.win.yml
+    artifacts:
+    - arrow-cpp-8.0.0.dev1124-py310(h[a-z0-9]+)_0_cpu.tar.bz2
+    - pyarrow-8.0.0.dev1124-py310(h[a-z0-9]+)_0_cpu.tar.bz2
+    params:
+      config: win_64_cuda_compiler_versionNonenumpy1.21python3.10.____cpython
+    branch: build-32-azure-conda-win-vs2017-py310
+    commit: 8cbf6a29826c225499f9b7801626008f24eb802e
+  conda-linux-gcc-py37-ppc64le: !Task
+    ci: azure
+    template: conda-recipes/azure.linux.yml
+    artifacts:
+    - arrow-cpp-8.0.0.dev1124-py37(h[a-z0-9]+)_0_cpu.tar.bz2
+    - pyarrow-8.0.0.dev1124-py37(h[a-z0-9]+)_0_cpu.tar.bz2
+    params:
+      config: linux_ppc64le_numpy1.18python3.7.____cpython
+    branch: build-32-azure-conda-linux-gcc-py37-ppc64le
+    commit: f079cd9eddbce67af0d08a3d6083141044ae8ae1
+  debian-bookworm-amd64: !Task
+    ci: github
+    template: linux-packages/github.linux.amd64.yml
+    artifacts:
+    - apache-arrow-apt-source_8.0.0.dev1124-1.debian.tar.xz
+    - apache-arrow-apt-source_8.0.0.dev1124-1.dsc
+    - apache-arrow-apt-source_8.0.0.dev1124-1_all.deb
+    - apache-arrow-apt-source_8.0.0.dev1124.orig.tar.gz
+    - apache-arrow_8.0.0.dev1124-1.debian.tar.xz
+    - apache-arrow_8.0.0.dev1124-1.dsc
+    - apache-arrow_8.0.0.dev1124.orig.tar.gz
+    - gir1.2-arrow-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-arrow-dataset-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-arrow-flight-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-arrow-flight-sql-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-gandiva-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-parquet-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-dataset-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-dataset900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-flight-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-flight-sql-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-flight-sql900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-flight900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-python-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-python-flight-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-python-flight900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-python-flight900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-python900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-python900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libgandiva-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libgandiva900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libparquet-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libparquet900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-arrow-cuda-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-plasma-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-cuda-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-cuda-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-cuda-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-cuda-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-cuda900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-cuda900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libplasma-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libplasma-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libplasma-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libplasma-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libplasma-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libplasma900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libplasma900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - plasma-store-server-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - plasma-store-server_8.0.0.dev1124-1_[a-z0-9]+.deb
+    params:
+      target: debian-bookworm
+      task_namespace: apt
+      upload_extensions:
+      - .ddeb
+      - .deb
+      - .debian.tar.xz
+      - .dsc
+      - .orig.tar.gz
+    branch: build-32-github-debian-bookworm-amd64
+    commit: 08500d5cb38f5b8548403959e691b8c076c6092f
+  conda-win-vs2017-py38: !Task
+    ci: azure
+    template: conda-recipes/azure.win.yml
+    artifacts:
+    - arrow-cpp-8.0.0.dev1124-py38(h[a-z0-9]+)_0_cpu.tar.bz2
+    - pyarrow-8.0.0.dev1124-py38(h[a-z0-9]+)_0_cpu.tar.bz2
+    params:
+      config: win_64_cuda_compiler_versionNonenumpy1.18python3.8.____cpython
+    branch: build-32-azure-conda-win-vs2017-py38
+    commit: 44bb72971d8814af922f6e901a7aa1717836489f
+  verify-rc-source-csharp-linux-ubuntu-22.04-amd64: !Task
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '22.04'
+      target: csharp
+      distro: ubuntu
+    branch: build-32-github-verify-rc-source-csharp-linux-ubuntu-22.04-amd64
+    commit: f679b42399f040ead434d27a2eece5c2538a55df
+  wheel-windows-cp39-amd64: !Task
+    ci: github
+    template: python-wheels/github.windows.yml
+    artifacts:
+    - pyarrow-8.0.0.dev1124-cp39-cp39-win_amd64.whl
+    params:
+      python_version: '3.9'
+    branch: build-32-github-wheel-windows-cp39-amd64
+    commit: 6a860a96b5271b78fceedcbd8266f3b0ed431b4c
+  conda-win-vs2017-py37-r40: !Task
+    ci: azure
+    template: conda-recipes/azure.win.yml
+    artifacts:
+    - arrow-cpp-8.0.0.dev1124-py37(h[a-z0-9]+)_0_cpu.tar.bz2
+    - pyarrow-8.0.0.dev1124-py37(h[a-z0-9]+)_0_cpu.tar.bz2
+    params:
+      config: win_64_cuda_compiler_versionNonenumpy1.18python3.7.____cpython
+      r_config: win_64_r_base4.0
+    branch: build-32-azure-conda-win-vs2017-py37-r40
+    commit: 438c4b4d36ec3ec9dc041293038573b8b087f7a3
+  conda-win-vs2017-py39: !Task
+    ci: azure
+    template: conda-recipes/azure.win.yml
+    artifacts:
+    - arrow-cpp-8.0.0.dev1124-py39(h[a-z0-9]+)_0_cpu.tar.bz2
+    - pyarrow-8.0.0.dev1124-py39(h[a-z0-9]+)_0_cpu.tar.bz2
+    params:
+      config: win_64_cuda_compiler_versionNonenumpy1.19python3.9.____cpython
+    branch: build-32-azure-conda-win-vs2017-py39
+    commit: a5ad1f75ca1089cf4d6dbf291aef65c8ea6da772
+  conda-linux-gcc-py39-arm64: !Task
+    ci: azure
+    template: conda-recipes/azure.linux.yml
+    artifacts:
+    - arrow-cpp-8.0.0.dev1124-py39(h[a-z0-9]+)_0_cpu.tar.bz2
+    - pyarrow-8.0.0.dev1124-py39(h[a-z0-9]+)_0_cpu.tar.bz2
+    params:
+      config: linux_aarch64_numpy1.19python3.9.____cpython
+    branch: build-32-azure-conda-linux-gcc-py39-arm64
+    commit: 9b15cd321845805ac0c977aa8bed1365e58f4a5a
+  test-debian-10-cpp-amd64: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        ARCH: amd64
+        DEBIAN: '10'
+      image: debian-cpp
+
+    branch: build-32-github-test-debian-10-cpp-amd64
+    commit: 9dc7829a6337c74527d4ee7471db5375054c21b2
+  wheel-macos-mavericks-cp310-amd64: !Task
+    ci: github
+    template: python-wheels/github.osx.amd64.yml
+    artifacts:
+    - pyarrow-8.0.0.dev1124-cp310-cp310-macosx_10_9_x86_64.whl
+    params:
+      python_version: '3.10'
+      macos_deployment_target: '10.9'
+      arrow_s3: OFF
+      arrow_gcs: OFF
+    branch: build-32-github-wheel-macos-mavericks-cp310-amd64
+    commit: 61dc47d145e6d18fe22ee475a3acac44e32543af
+  conda-linux-gcc-py38-cpu: !Task
+    ci: azure
+    template: conda-recipes/azure.linux.yml
+    artifacts:
+    - arrow-cpp-8.0.0.dev1124-py38(h[a-z0-9]+)_0_cpu.tar.bz2
+    - pyarrow-8.0.0.dev1124-py38(h[a-z0-9]+)_0_cpu.tar.bz2
+    params:
+      config: linux_64_c_compiler_version9cuda_compiler_versionNonecxx_compiler_version9numpy1.18python3.8.____cpython
+    branch: build-32-azure-conda-linux-gcc-py38-cpu
+    commit: 9ec2745f545fa3d335003be569917ea6c56e59d7
+  debian-bullseye-amd64: !Task
+    ci: github
+    template: linux-packages/github.linux.amd64.yml
+    artifacts:
+    - apache-arrow-apt-source_8.0.0.dev1124-1.debian.tar.xz
+    - apache-arrow-apt-source_8.0.0.dev1124-1.dsc
+    - apache-arrow-apt-source_8.0.0.dev1124-1_all.deb
+    - apache-arrow-apt-source_8.0.0.dev1124.orig.tar.gz
+    - apache-arrow_8.0.0.dev1124-1.debian.tar.xz
+    - apache-arrow_8.0.0.dev1124-1.dsc
+    - apache-arrow_8.0.0.dev1124.orig.tar.gz
+    - gir1.2-arrow-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-arrow-dataset-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-arrow-flight-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-arrow-flight-sql-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-gandiva-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-parquet-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-dataset-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-dataset900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-flight-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-flight-sql-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-flight-sql900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-flight900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-python-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-python-flight-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-python-flight900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-python-flight900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-python900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-python900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libgandiva-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libgandiva900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libparquet-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libparquet900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-arrow-cuda-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-plasma-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-cuda-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-cuda-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-cuda-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-cuda-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-cuda900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-cuda900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libplasma-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libplasma-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libplasma-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libplasma-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libplasma-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libplasma900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libplasma900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - plasma-store-server-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - plasma-store-server_8.0.0.dev1124-1_[a-z0-9]+.deb
+    params:
+      target: debian-bullseye
+      task_namespace: apt
+      upload_extensions:
+      - .ddeb
+      - .deb
+      - .debian.tar.xz
+      - .dsc
+      - .orig.tar.gz
+    branch: build-32-github-debian-bullseye-amd64
+    commit: 0f6216861873758fc70b288fcaabd7fb2e220b17
+  wheel-manylinux2014-cp37-amd64: !Task
+    ci: github
+    template: python-wheels/github.linux.amd64.yml
+    artifacts:
+    - pyarrow-8.0.0.dev1124-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+    params:
+      python_version: '3.7'
+      manylinux_version: '2014'
+    branch: build-32-github-wheel-manylinux2014-cp37-amd64
+    commit: d65e6f282ff7e03abb8cdac2e43b2e6816a51e64
+  verify-rc-source-go-macos-amd64: !Task
+    ci: github
+    template: verify-rc/github.macos.amd64.yml
+    artifacts: []
+    params:
+      target: go
+      github_runner: macos-10.15
+    branch: build-32-github-verify-rc-source-go-macos-amd64
+    commit: 9a1f518750f057300d93f062ece383f3220d768f
+  verify-rc-source-csharp-linux-ubuntu-20.04-amd64: !Task
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '20.04'
+      target: csharp
+      distro: ubuntu
+    branch: build-32-github-verify-rc-source-csharp-linux-ubuntu-20.04-amd64
+    commit: 9e9d2337b08d5bdd004158ab680407c44b022117
+  wheel-macos-big-sur-cp310-universal2: !Task
+    ci: github
+    template: python-wheels/github.osx.arm64.yml
+    artifacts:
+    - pyarrow-8.0.0.dev1124-cp310-cp310-macosx_10_13_universal2.whl
+    params:
+      arch: universal2
+      python_version: '3.10'
+      macos_deployment_target: '10.13'
+    branch: build-32-github-wheel-macos-big-sur-cp310-universal2
+    commit: 0912c266d2036b7f3ff5aef3718295a721830ff3
+  verify-rc-source-cpp-linux-ubuntu-22.04-amd64: !Task
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '22.04'
+      target: cpp
+      distro: ubuntu
+    branch: build-32-github-verify-rc-source-cpp-linux-ubuntu-22.04-amd64
+    commit: 1d9ea2c9e3ac1e70ae04738df8c9ddddebde2cd7
+  test-ubuntu-20.04-cpp-14: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: 20.04
+      flags: -e CMAKE_ARGS=-DCMAKE_CXX_STANDARD=14
+      image: ubuntu-cpp
+    branch: build-32-github-test-ubuntu-20.04-cpp-14
+    commit: 386f432b5bf89085dda0a35b7572b72a0f9915a4
+  centos-9-stream-arm64: !Task
+    ci: travis
+    template: linux-packages/travis.linux.arm64.yml
+    artifacts:
+    - arrow-dataset-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-dataset-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-dataset-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-dataset-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-dataset-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-dataset-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-dataset-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-debugsource-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-sql-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-sql-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-sql-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-sql-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-sql-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-sql-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-sql-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-python-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-python-flight-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-python-flight-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-python-flight-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-python-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-python-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet[0-9]+-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet[0-9]+-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet[0-9]+-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet[0-9]+-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma[0-9]+-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma[0-9]+-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma[0-9]+-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma[0-9]+-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-store-server-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-store-server-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    params:
+      target: centos-9-stream-aarch64
+      task_namespace: yum
+      upload_extensions:
+      - .rpm
+    branch: build-32-travis-centos-9-stream-arm64
+    commit: cecbfcff541d44e74f5fc5402e4ff7469b5fd7fa
+  ubuntu-focal-amd64: !Task
+    ci: github
+    template: linux-packages/github.linux.amd64.yml
+    artifacts:
+    - apache-arrow-apt-source_8.0.0.dev1124-1.debian.tar.xz
+    - apache-arrow-apt-source_8.0.0.dev1124-1.dsc
+    - apache-arrow-apt-source_8.0.0.dev1124-1_all.deb
+    - apache-arrow-apt-source_8.0.0.dev1124.orig.tar.gz
+    - apache-arrow_8.0.0.dev1124-1.debian.tar.xz
+    - apache-arrow_8.0.0.dev1124-1.dsc
+    - apache-arrow_8.0.0.dev1124.orig.tar.gz
+    - gir1.2-arrow-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-arrow-dataset-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-arrow-flight-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-arrow-flight-sql-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-gandiva-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-parquet-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-dataset-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dataset900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-dataset900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-flight-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-flight-sql-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight-sql900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-flight-sql900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-flight900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-flight900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-python-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-python-flight-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-python-flight900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-python-flight900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-python900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-python900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libgandiva-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libgandiva900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libgandiva900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libparquet-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libparquet900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libparquet900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-arrow-cuda-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - gir1.2-plasma-1.0_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-cuda-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-cuda-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-cuda-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-cuda-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libarrow-cuda900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libarrow-cuda900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libplasma-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libplasma-glib-dev_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libplasma-glib-doc_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libplasma-glib900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libplasma-glib900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - libplasma900-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - libplasma900_8.0.0.dev1124-1_[a-z0-9]+.deb
+    - plasma-store-server-dbgsym_8.0.0.dev1124-1_[a-z0-9]+.d?deb
+    - plasma-store-server_8.0.0.dev1124-1_[a-z0-9]+.deb
+    params:
+      target: ubuntu-focal
+      task_namespace: apt
+      upload_extensions:
+      - .ddeb
+      - .deb
+      - .debian.tar.xz
+      - .dsc
+      - .orig.tar.gz
+    branch: build-32-github-ubuntu-focal-amd64
+    commit: 9e3070861e4fb483322425f798ac6bd3a434f0fa
+  wheel-manylinux2014-cp39-arm64: !Task
+    ci: travis
+    template: python-wheels/travis.linux.arm64.yml
+    artifacts:
+    - pyarrow-8.0.0.dev1124-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
+    params:
+      python_version: '3.9'
+      manylinux_version: '2014'
+    branch: build-32-travis-wheel-manylinux2014-cp39-arm64
+    commit: 47f8fbadbba6fa6014ea31732e1e0131bcda17f2
+  test-r-offline-minimal: !Task
+    ci: azure
+    template: r/azure.linux.yml
+    artifacts: []
+    params:
+      r_org: rocker
+      r_image: r-base
+      r_tag: latest
+      flags: -e TEST_OFFLINE_BUILD=true
+
+    branch: build-32-azure-test-r-offline-minimal
+    commit: 8d16193586523f0050e9512d0dafd6512285bb56
+  conda-linux-gcc-py37-arm64: !Task
+    ci: azure
+    template: conda-recipes/azure.linux.yml
+    artifacts:
+    - arrow-cpp-8.0.0.dev1124-py37(h[a-z0-9]+)_0_cpu.tar.bz2
+    - pyarrow-8.0.0.dev1124-py37(h[a-z0-9]+)_0_cpu.tar.bz2
+    params:
+      config: linux_aarch64_numpy1.18python3.7.____cpython
+    branch: build-32-azure-conda-linux-gcc-py37-arm64
+    commit: 87863bf339ad08b70e90c63b4fd33ca085241b14
+  verify-rc-source-integration-linux-ubuntu-22.04-amd64: !Task
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '22.04'
+      target: integration
+      distro: ubuntu
+    branch: build-32-github-verify-rc-source-integration-linux-ubuntu-22.04-amd64
+    commit: b1cb311cc18449c2830fa295c29e6a96ee9c7e94
+  conda-osx-clang-py39: !Task
+    ci: azure
+    template: conda-recipes/azure.osx.yml
+    artifacts:
+    - arrow-cpp-8.0.0.dev1124-py39(h[a-z0-9]+)_0_cpu.tar.bz2
+    - pyarrow-8.0.0.dev1124-py39(h[a-z0-9]+)_0_cpu.tar.bz2
+    params:
+      config: osx_64_numpy1.19python3.9.____cpython
+    branch: build-32-azure-conda-osx-clang-py39
+    commit: 2cf6a5d5c598de2de09b2b73126c4be3f5418ba0
+  test-ubuntu-18.04-cpp-static: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: 18.04
+      flags: -e ARROW_BUILD_SHARED=OFF -e ARROW_BUILD_STATIC=ON -e ARROW_TEST_LINKAGE=static
+      image: ubuntu-cpp
+
+    branch: build-32-github-test-ubuntu-18.04-cpp-static
+    commit: 02e84f2ab00eb8c3afaeb3aa08ca9bfcd1756ccd
+  test-r-rocker-r-base-latest: !Task
+    ci: azure
+    template: r/azure.linux.yml
+    artifacts: []
+    params:
+      r_org: rocker
+      r_image: r-base
+      r_tag: latest
+    branch: build-32-azure-test-r-rocker-r-base-latest
+    commit: d608dff1a9509be68e21391e8f7d9dcbc42e9a9a
+  wheel-manylinux2014-cp39-amd64: !Task
+    ci: github
+    template: python-wheels/github.linux.amd64.yml
+    artifacts:
+    - pyarrow-8.0.0.dev1124-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+    params:
+      python_version: '3.9'
+      manylinux_version: '2014'
+    branch: build-32-github-wheel-manylinux2014-cp39-amd64
+    commit: b9fdb7412921007d3bd6f871cddb1108500b7218
+  verify-rc-source-java-linux-ubuntu-22.04-amd64: !Task
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '22.04'
+      target: java
+      distro: ubuntu
+    branch: build-32-github-verify-rc-source-java-linux-ubuntu-22.04-amd64
+    commit: 902b0efdb77ceed32e89f5fae984aa2f679d988f
+  verify-rc-source-java-linux-conda-latest-amd64: !Task
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        CONDA: latest
+      target: java
+      distro: conda
+    branch: build-32-github-verify-rc-source-java-linux-conda-latest-amd64
+    commit: ef463e82c96ab5b607763a48b9deef6ad3ebe0e0
+  wheel-macos-big-sur-cp310-arm64: !Task
+    ci: github
+    template: python-wheels/github.osx.arm64.yml
+    artifacts:
+    - pyarrow-8.0.0.dev1124-cp310-cp310-macosx_11_0_arm64.whl
+    params:
+      arch: arm64
+      python_version: '3.10'
+      macos_deployment_target: '11.0'
+    branch: build-32-github-wheel-macos-big-sur-cp310-arm64
+    commit: de9c518d827434ea98cf8a6ebba597b0a929c310
+  test-conda-python-3.8-hypothesis: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        PYTHON: 3.8
+        HYPOTHESIS_PROFILE: ci
+        PYARROW_TEST_HYPOTHESIS: ON
+        # limit to execute hypothesis tests only
+        PYTEST_ARGS: -m hypothesis
+      image: conda-python-pandas
+
+    branch: build-32-github-test-conda-python-3.8-hypothesis
+    commit: 8c8fea8df83c755fd9467047a90c4adb1879709a
+  verify-rc-source-python-macos-arm64: !Task
+    ci: github
+    template: verify-rc/github.macos.arm64.yml
+    artifacts: []
+    params:
+      env:
+        ARROW_PLASMA: 0
+        ARROW_FLIGHT: 0
+        ARROW_GANDIVA: 0
+        TEST_INTEGRATION_JAVA: 0
+        PYTEST_ADDOPTS: -k 'not test_cancellation'
+      target: python
+      github_runner: [self-hosted, macOS, arm64]
+    branch: build-32-github-verify-rc-source-python-macos-arm64
+    commit: a7128f82f63372bae647297b7872856a38d2238b
+  test-debian-11-cpp-i386: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        ARCH: i386
+        DEBIAN: '11'
+      flags: -e ARROW_S3=OFF -e ARROW_GANDIVA=OFF
+      image: debian-cpp
+
+    branch: build-32-github-test-debian-11-cpp-i386
+    commit: 5bdf6720c3974f5ca9ec4287856c64ecf0a7955c
+  homebrew-r-autobrew: !Task
+    ci: github
+    template: r/github.macos.autobrew.yml
+    artifacts: []
+    params: {}
+    branch: build-32-github-homebrew-r-autobrew
+    commit: 4f81b0a48f06252d5f22b675611d20d2b43da4a5
+  test-conda-python-3.10: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        PYTHON: '3.10'
+      image: conda-python
+
+    branch: build-32-github-test-conda-python-3.10
+    commit: 2190441b049e5cceae94180dce248f8a72f322f2
+  test-r-rstudio-r-base-4.2-focal: !Task
+    ci: azure
+    template: r/azure.linux.yml
+    artifacts: []
+    params:
+      r_org: rstudio
+      r_image: r-base
+      r_tag: 4.2-focal
+    branch: build-32-azure-test-r-rstudio-r-base-4.2-focal
+    commit: e022db66a6b4e595a42f9fd557fc503ebad9f12c
+  verify-rc-source-cpp-linux-ubuntu-20.04-amd64: !Task
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '20.04'
+      target: cpp
+      distro: ubuntu
+    branch: build-32-github-verify-rc-source-cpp-linux-ubuntu-20.04-amd64
+    commit: 29aacb30ef04194f0ccb9b4533d094ba0a8e6e83
+  verify-rc-source-java-linux-ubuntu-18.04-amd64: !Task
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '18.04'
+      target: java
+      distro: ubuntu
+    branch: build-32-github-verify-rc-source-java-linux-ubuntu-18.04-amd64
+    commit: a45df983d6f32dd04172be99eb3ae9cf8bd219c7
+  wheel-windows-cp38-amd64: !Task
+    ci: github
+    template: python-wheels/github.windows.yml
+    artifacts:
+    - pyarrow-8.0.0.dev1124-cp38-cp38-win_amd64.whl
+    params:
+      python_version: '3.8'
+    branch: build-32-github-wheel-windows-cp38-amd64
+    commit: d986643f21e386930d1e2794006b1fe366882633
+  verify-rc-source-js-macos-amd64: !Task
+    ci: github
+    template: verify-rc/github.macos.amd64.yml
+    artifacts: []
+    params:
+      target: js
+      github_runner: macos-10.15
+    branch: build-32-github-verify-rc-source-js-macos-amd64
+    commit: 7474488a3105237ec1343d6a67cd838653292bb4
+  test-conda-python-3.9-dask-master: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        PYTHON: 3.9
+        DASK: master
+      # use the latest dask release, so prevent reusing any cached layers
+      flags: --no-leaf-cache
+      image: conda-python-dask
+
+# Turbodbc is currently failing to build. See:
+# https://issues.apache.org/jira/browse/ARROW-15997
+# #   test-conda-python-3.7-turbodbc-latest:
+#     ci: github
+#     template: docker-tests/github.linux.yml
+#     params:
+#       env:
+#         PYTHON: 3.7
+#         TURBODBC: latest
+#       # use the latest turbodbc release, so prevent reusing any cached layers
+#       flags: --no-leaf-cache
+#       image: conda-python-turbodbc
+# #   test-conda-python-3.7-turbodbc-master:
+#     ci: github
+#     template: docker-tests/github.linux.yml
+#     params:
+#       env:
+#         PYTHON: 3.7
+#         TURBODBC: master
+#       # use the latest turbodbc release, so prevent reusing any cached layers
+#       flags: --no-leaf-cache
+#       image: conda-python-turbodbc
+# 
+    branch: build-32-github-test-conda-python-3.9-dask-master
+    commit: 847930b6f0828c7aed8b7a04e991024d5bd67921
+  wheel-manylinux2014-cp38-amd64: !Task
+    ci: github
+    template: python-wheels/github.linux.amd64.yml
+    artifacts:
+    - pyarrow-8.0.0.dev1124-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+    params:
+      python_version: '3.8'
+      manylinux_version: '2014'
+    branch: build-32-github-wheel-manylinux2014-cp38-amd64
+    commit: 9d40acbc2f61221195923fef00663d740b01da8c
+  test-build-cpp-fuzz: !Task
+    ci: github
+    template: fuzz-tests/github.oss-fuzz.yml
+    artifacts: []
+    params: {}
+    branch: build-32-github-test-build-cpp-fuzz
+    commit: 06cf8364f3e1dff7306747a5607677bf436da1aa
+  test-ubuntu-c-glib: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      image: ubuntu-c-glib
+    branch: build-32-github-test-ubuntu-c-glib
+    commit: 44a498350e8cfd58e2eb48f69e8ddaf9bd494f55
+  verify-rc-source-python-linux-ubuntu-22.04-amd64: !Task
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '22.04'
+      target: python
+      distro: ubuntu
+    branch: build-32-github-verify-rc-source-python-linux-ubuntu-22.04-amd64
+    commit: d3e6b6559497a56e152a5b60113acc7226bf4cf3
+  conda-linux-gcc-py37-cpu-r40: !Task
+    ci: azure
+    template: conda-recipes/azure.linux.yml
+    artifacts:
+    - arrow-cpp-8.0.0.dev1124-py37(h[a-z0-9]+)_0_cpu.tar.bz2
+    - pyarrow-8.0.0.dev1124-py37(h[a-z0-9]+)_0_cpu.tar.bz2
+    params:
+      config: linux_64_c_compiler_version9cuda_compiler_versionNonecxx_compiler_version9numpy1.18python3.7.____cpython
+      r_config: linux_64_r_base4.0
+    branch: build-32-azure-conda-linux-gcc-py37-cpu-r40
+    commit: 69fe149e32c18eb092a4c072f22ba4349a72af0a
+  amazon-linux-2-amd64: !Task
+    ci: github
+    template: linux-packages/github.linux.amd64.yml
+    artifacts:
+    - apache-arrow-release-8.0.0.dev1124-1.[a-z0-9]+.noarch.rpm
+    - apache-arrow-release-8.0.0.dev1124-1.[a-z0-9]+.src.rpm
+    - arrow-dataset-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-dataset-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-dataset-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-dataset-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-dataset-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-8.0.0.dev1124-1.[a-z0-9]+.src.rpm
+    - parquet-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet[0-9]+-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet[0-9]+-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma[0-9]+-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma[0-9]+-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-store-server-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    params:
+      target: amazon-linux-2
+      task_namespace: yum
+      upload_extensions:
+      - .rpm
+    branch: build-32-github-amazon-linux-2-amd64
+    commit: c8bfd0718b773509fb97a726df22a2fe813c7de1
+  verify-rc-source-cpp-macos-conda-amd64: !Task
+    ci: github
+    template: verify-rc/github.macos.amd64.yml
+    artifacts: []
+    params:
+      target: cpp
+      use_conda: true
+      github_runner: macos-10.15
+    branch: build-32-github-verify-rc-source-cpp-macos-conda-amd64
+    commit: 98a895b551f3f26e50a0af3c995b13ccd6b78e00
+  example-cpp-minimal-build-static: !Task
+    ci: github
+    template: cpp-examples/github.linux.yml
+    artifacts: []
+    params:
+      type: minimal_build
+      run: static
+    branch: build-32-github-example-cpp-minimal-build-static
+    commit: 542120f6d6522617a39e8ad39f1cd5d8dbe5f70e
+  verify-rc-source-integration-linux-ubuntu-18.04-amd64: !Task
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '18.04'
+      target: integration
+      distro: ubuntu
+    branch: build-32-github-verify-rc-source-integration-linux-ubuntu-18.04-amd64
+    commit: 165a5c0e7fca0995e3542ccad9d48395283aed2d
+  homebrew-cpp: !Task
+    ci: github
+    template: homebrew-formulae/github.macos.yml
+    artifacts: []
+    params:
+      formula: apache-arrow.rb
+
+    branch: build-32-github-homebrew-cpp
+    commit: d7f08e9fa9d7dcd4ac7bad20e59ff96e199cf27f
+  test-debian-c-glib: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      image: debian-c-glib
+    branch: build-32-github-test-debian-c-glib
+    commit: 0b7d96f5dfec7b5cf3b6749cc734c6e2fc322668
+  almalinux-8-amd64: !Task
+    ci: github
+    template: linux-packages/github.linux.amd64.yml
+    artifacts:
+    - apache-arrow-release-8.0.0.dev1124-1.[a-z0-9]+.noarch.rpm
+    - apache-arrow-release-8.0.0.dev1124-1.[a-z0-9]+.src.rpm
+    - arrow-dataset-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-dataset-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-dataset-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-dataset-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-dataset-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-dataset-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-dataset-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-debugsource-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-sql-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-sql-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-sql-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-sql-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-sql-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-sql-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-sql-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-python-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-python-flight-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-python-flight-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-python-flight-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-python-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-python-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-8.0.0.dev1124-1.[a-z0-9]+.src.rpm
+    - gandiva-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - gandiva-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - gandiva-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - gandiva[0-9]+-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - gandiva[0-9]+-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - gandiva[0-9]+-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - gandiva[0-9]+-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet[0-9]+-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet[0-9]+-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet[0-9]+-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet[0-9]+-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma[0-9]+-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma[0-9]+-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma[0-9]+-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma[0-9]+-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-store-server-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-store-server-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    params:
+      target: almalinux-8
+      task_namespace: yum
+      upload_extensions:
+      - .rpm
+    branch: build-32-github-almalinux-8-amd64
+    commit: 8bf53600e608c7ae1707a234ff8483cadde144c9
+  test-ubuntu-20.04-cpp-bundled: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: 20.04
+      image: ubuntu-cpp-bundled
+
+    branch: build-32-github-test-ubuntu-20.04-cpp-bundled
+    commit: addec932f8136ee46f9b22bc8f0968959a3588cb
+  test-conda-cpp-valgrind: !Task
+    ci: azure
+    template: docker-tests/azure.linux.yml
+    artifacts: []
+    params:
+      image: conda-cpp-valgrind
+
+    branch: build-32-azure-test-conda-cpp-valgrind
+    commit: 71c08c6ad78cc8af23ffe5eb271d523d5e6c5730
+  test-conda-python-3.9-dask-latest: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        PYTHON: 3.9
+        DASK: latest
+      # use the latest dask release, so prevent reusing any cached layers
+      flags: --no-leaf-cache
+      image: conda-python-dask
+    branch: build-32-github-test-conda-python-3.9-dask-latest
+    commit: 993fb28f58eba91c11589c45aacad595702565dd
+  test-conda-python-3.7-pandas-latest: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        PYTHON: '3.7'
+        PANDAS: latest
+        NUMPY: latest
+        # ensure we have at least one build with parquet encryption disabled
+        PARQUET_REQUIRE_ENCRYPTION: OFF
+      # use the latest pandas release, so prevent reusing any cached layers
+      flags: --no-leaf-cache
+      image: conda-python-pandas
+    branch: build-32-github-test-conda-python-3.7-pandas-latest
+    commit: ba3bcb2ff7d56e6c0d388727ae450ab059a6769c
+  almalinux-8-arm64: !Task
+    ci: travis
+    template: linux-packages/travis.linux.arm64.yml
+    artifacts:
+    - arrow-dataset-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-dataset-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-dataset-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-dataset-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-dataset-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-dataset-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-dataset-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-debugsource-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-sql-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-sql-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-flight-sql-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-sql-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-sql-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-sql-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-flight-sql-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-python-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow-python-flight-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-python-flight-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-python-flight-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-python-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - arrow[0-9]+-python-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet[0-9]+-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet[0-9]+-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet[0-9]+-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - parquet[0-9]+-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-glib-devel-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-glib-doc-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma[0-9]+-glib-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma[0-9]+-glib-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma[0-9]+-libs-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma[0-9]+-libs-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-store-server-debuginfo-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    - plasma-store-server-8.0.0.dev1124-1.[a-z0-9]+.[a-z0-9_]+.rpm
+    params:
+      target: almalinux-8-aarch64
+      task_namespace: yum
+      upload_extensions:
+      - .rpm
+    branch: build-32-travis-almalinux-8-arm64
+    commit: 9739dabe21fc98f8ac476362df8606f985dc1ba9
+  verify-rc-source-java-macos-amd64: !Task
+    ci: github
+    template: verify-rc/github.macos.amd64.yml
+    artifacts: []
+    params:
+      target: java
+      github_runner: macos-10.15
+    branch: build-32-github-verify-rc-source-java-macos-amd64
+    commit: 35590a0743b6f57d1181a3c4694289bb18906e29
+  test-conda-python-3.7-hdfs-3.2.1: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        PYTHON: 3.7
+        HDFS: 3.2.1
+      image: conda-python-hdfs
+
+    branch: build-32-github-test-conda-python-3.7-hdfs-3.2.1
+    commit: ad5482ef141a5514c49ca00e3e963b346f9cd584
+  verify-rc-source-python-linux-almalinux-8-amd64: !Task
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        ALMALINUX: '8'
+      target: python
+      distro: almalinux
+    branch: build-32-github-verify-rc-source-python-linux-almalinux-8-amd64
+    commit: c2de0f0e1481dae793f625b6793e0ac65f708445
+  conan-minimum: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      image: conan
+
+    branch: build-32-github-conan-minimum
+    commit: 447355df4b9dbd7cc85c2c0bf758d9685c948bb0
+  test-r-minimal-build: !Task
+    ci: azure
+    template: r/azure.linux.yml
+    artifacts: []
+    params:
+      r_org: rocker
+      r_image: r-base
+      r_tag: latest
+      flags: -e LIBARROW_MINIMAL=TRUE
+
+    branch: build-32-azure-test-r-minimal-build
+    commit: fcee23adaf7e927ab54f515a1015be986e4e0874
+  test-r-rhub-ubuntu-gcc-release-latest: !Task
+    ci: azure
+    template: r/azure.linux.yml
+    artifacts: []
+    params:
+      r_org: rhub
+      r_image: ubuntu-gcc-release
+      r_tag: latest
+    branch: build-32-azure-test-r-rhub-ubuntu-gcc-release-latest
+    commit: 9e192f6ead224025186928848c010ac8d271bfe4
+  verify-rc-source-cpp-linux-almalinux-8-amd64: !Task
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        ALMALINUX: '8'
+      target: cpp
+      distro: almalinux
+    branch: build-32-github-verify-rc-source-cpp-linux-almalinux-8-amd64
+    commit: 3bd0b40cdf607b70b4a8dfa907f25c83efefdc4f
+  python-sdist: !Task
+    ci: github
+    template: python-sdist/github.yml
+    artifacts:
+    - pyarrow-8.0.0.dev1124.tar.gz
+    params: {}
+    branch: build-32-github-python-sdist
+    commit: 8456aa9d03d0634fd162c39d2d36c70c1cf0e391
+  test-ubuntu-20.04-cpp: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '20.04'
+      image: ubuntu-cpp
+    branch: build-32-github-test-ubuntu-20.04-cpp
+    commit: 1fdb5719c8737a37889c3952ba1dfa48197b7e96
+  test-ubuntu-18.04-cpp-release: !Task
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: 18.04
+      flags: -e ARROW_BUILD_TYPE=release
+      image: ubuntu-cpp
+
+    branch: build-32-github-test-ubuntu-18.04-cpp-release
+    commit: c1fa75b6c9f15b0cd597c2c91b0b8a0e450c1ebe
+params: {}
+branch: build-32
