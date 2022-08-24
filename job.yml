@@ -1,0 +1,2184 @@
+!Job
+target: !Target
+  head: 9de346907c11d9217bd7306fccf04e3bc896fa9c
+  email: fionala7@gmail.com
+  branch: ARROW-15693
+  remote: https://github.com/mathworks/arrow.git
+  github_repo: mathworks/arrow
+  version: 1.9.0.dev10520
+  no_rc_version: 1.9.0.dev10520
+  default_branch:
+  - main
+  - master
+  no_rc_semver_version: 1.9.0-dev10520
+tasks:
+  test-r-linux-rchk: !Task
+    name: test-r-linux-rchk
+    ci: github
+    template: r/github.linux.rchk.yml
+    artifacts: []
+    params: {}
+    branch: build-34-github-test-r-linux-rchk
+    commit: 5d8fe91c8a883ba526ddd2a7bbc98af8b4bffa33
+  verify-rc-source-js-linux-ubuntu-22.04-amd64: !Task
+    name: verify-rc-source-js-linux-ubuntu-22.04-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '22.04'
+      target: js
+      distro: ubuntu
+    branch: build-34-github-verify-rc-source-js-linux-ubuntu-22.04-amd64
+    commit: 653c3d6ee8f40951bcadfa1c3a1b4258c1e9effc
+  verify-rc-source-integration-macos-arm64: !Task
+    name: verify-rc-source-integration-macos-arm64
+    ci: github
+    template: verify-rc/github.macos.arm64.yml
+    artifacts: []
+    params:
+      env:
+        ARROW_PLASMA: 0
+        ARROW_FLIGHT: 0
+        ARROW_GANDIVA: 0
+        TEST_INTEGRATION_JAVA: 0
+        PYTEST_ADDOPTS: -k 'not test_cancellation'
+      target: integration
+      github_runner: [self-hosted, macOS, arm64]
+    branch: build-34-github-verify-rc-source-integration-macos-arm64
+    commit: 71ab0ccf88822ec079c578cb00a8cca3209ae8dc
+  verify-rc-source-cpp-linux-ubuntu-22.04-amd64: !Task
+    name: verify-rc-source-cpp-linux-ubuntu-22.04-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '22.04'
+      target: cpp
+      distro: ubuntu
+    branch: build-34-github-verify-rc-source-cpp-linux-ubuntu-22.04-amd64
+    commit: a1de17937b9c87b001d4473d8a3cbdf28fbe842f
+  verify-rc-source-csharp-linux-almalinux-8-amd64: !Task
+    name: verify-rc-source-csharp-linux-almalinux-8-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        ALMALINUX: '8'
+      target: csharp
+      distro: almalinux
+    branch: build-34-github-verify-rc-source-csharp-linux-almalinux-8-amd64
+    commit: 803933ccc19c9b6e696c25eafdc3eac08dd8ee55
+  test-r-dev-duckdb: !Task
+    name: test-r-dev-duckdb
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        R_DUCKDB_DEV: true
+      image: ubuntu-r-only-r
+
+    branch: build-34-github-test-r-dev-duckdb
+    commit: 9b1932fdc4682a3d4bf1bc57fd4e7d1d330394ef
+  verify-rc-binaries-wheels-macos-11-arm64: !Task
+    name: verify-rc-binaries-wheels-macos-11-arm64
+    ci: github
+    template: verify-rc/github.macos.arm64.yml
+    artifacts: []
+    params:
+      env:
+        PYTEST_ADDOPTS: -k 'not test_cancellation'
+      github_runner: [self-hosted, macOS, arm64]
+      arch_emulation: arm64
+      target: wheels
+
+  ######################## Windows verification ##############################
+
+    branch: build-34-github-verify-rc-binaries-wheels-macos-11-arm64
+    commit: 43e86fd4572a0550be12160cd3975c5a169805e4
+  wheel-windows-cp38-amd64: !Task
+    name: wheel-windows-cp38-amd64
+    ci: github
+    template: python-wheels/github.windows.yml
+    artifacts:
+    - pyarrow-1.9.0.dev10520-cp38-cp38-win_amd64.whl
+    params:
+      python_version: '3.8'
+    branch: build-34-github-wheel-windows-cp38-amd64
+    commit: 92abbe58b6ca27a75f4419041ad64d5d146ecf91
+  test-ubuntu-20.04-cpp-14: !Task
+    name: test-ubuntu-20.04-cpp-14
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: 20.04
+      flags: -e CMAKE_ARGS=-DCMAKE_CXX_STANDARD=14
+      image: ubuntu-cpp
+    branch: build-34-github-test-ubuntu-20.04-cpp-14
+    commit: a9d0b63c0a07191fce8abfc5e5c55a50b668b842
+  verify-rc-source-ruby-macos-amd64: !Task
+    name: verify-rc-source-ruby-macos-amd64
+    ci: github
+    template: verify-rc/github.macos.amd64.yml
+    artifacts: []
+    params:
+      target: ruby
+      github_runner: macos-latest
+
+    branch: build-34-github-verify-rc-source-ruby-macos-amd64
+    commit: c6fba7e9f8d6fc9fea89774e52f4a9adcf66fc9f
+  wheel-windows-cp37-amd64: !Task
+    name: wheel-windows-cp37-amd64
+    ci: github
+    template: python-wheels/github.windows.yml
+    artifacts:
+    - pyarrow-1.9.0.dev10520-cp37-cp37m-win_amd64.whl
+    params:
+      python_version: '3.7'
+    branch: build-34-github-wheel-windows-cp37-amd64
+    commit: f093fb12893bb8ab218533f375ddc19c0ef3bfbb
+  test-conda-python-3.9-spark-master: !Task
+    name: test-conda-python-3.9-spark-master
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        PYTHON: '3.9'
+        SPARK: master
+        TEST_PYARROW_ONLY: 'false'
+      # use the branch-3.0 of spark, so prevent reusing any layers
+      flags: --no-leaf-cache
+      image: conda-python-spark
+      fetch_depth: 0
+
+    branch: build-34-github-test-conda-python-3.9-spark-master
+    commit: b628ffd9b369b52ee9cc2034db4824001a41bcbe
+  verify-rc-source-integration-macos-amd64: !Task
+    name: verify-rc-source-integration-macos-amd64
+    ci: github
+    template: verify-rc/github.macos.amd64.yml
+    artifacts: []
+    params:
+      target: integration
+      github_runner: macos-latest
+    branch: build-34-github-verify-rc-source-integration-macos-amd64
+    commit: f5692e491bc5d94c90bc03fc421d79a3cfa8e918
+  verify-rc-source-python-macos-amd64: !Task
+    name: verify-rc-source-python-macos-amd64
+    ci: github
+    template: verify-rc/github.macos.amd64.yml
+    artifacts: []
+    params:
+      target: python
+      github_runner: macos-latest
+    branch: build-34-github-verify-rc-source-python-macos-amd64
+    commit: 48fe2e99f28d9596bb113479eea0c684c3ad0c85
+  verify-rc-source-java-macos-amd64: !Task
+    name: verify-rc-source-java-macos-amd64
+    ci: github
+    template: verify-rc/github.macos.amd64.yml
+    artifacts: []
+    params:
+      target: java
+      github_runner: macos-latest
+    branch: build-34-github-verify-rc-source-java-macos-amd64
+    commit: 5ba55b8d55ea5ed602b2157430ce377e8c30d4ff
+  verify-rc-source-csharp-linux-conda-latest-amd64: !Task
+    name: verify-rc-source-csharp-linux-conda-latest-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        CONDA: latest
+      target: csharp
+      distro: conda
+    branch: build-34-github-verify-rc-source-csharp-linux-conda-latest-amd64
+    commit: ebaebb8e91d4fd4acd5474fa8586aaf50165a7d9
+  verify-rc-source-csharp-linux-ubuntu-18.04-amd64: !Task
+    name: verify-rc-source-csharp-linux-ubuntu-18.04-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '18.04'
+      target: csharp
+      distro: ubuntu
+    branch: build-34-github-verify-rc-source-csharp-linux-ubuntu-18.04-amd64
+    commit: 5e8729261dbf4e6aa2784b15224fc243b1ec00d4
+  test-debian-ruby: !Task
+    name: test-debian-ruby
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      image: debian-ruby
+    branch: build-34-github-test-debian-ruby
+    commit: e3d17c7282c182ed32433e90a002f6d84956c5a8
+  verify-rc-source-js-macos-arm64: !Task
+    name: verify-rc-source-js-macos-arm64
+    ci: github
+    template: verify-rc/github.macos.arm64.yml
+    artifacts: []
+    params:
+      env:
+        ARROW_PLASMA: 0
+        ARROW_FLIGHT: 0
+        ARROW_GANDIVA: 0
+        TEST_INTEGRATION_JAVA: 0
+        PYTEST_ADDOPTS: -k 'not test_cancellation'
+      target: js
+      github_runner: [self-hosted, macOS, arm64]
+    branch: build-34-github-verify-rc-source-js-macos-arm64
+    commit: 352c214a762e5f78ba01b5cb1e4a029082b180fd
+  wheel-manylinux2014-cp310-amd64: !Task
+    name: wheel-manylinux2014-cp310-amd64
+    ci: github
+    template: python-wheels/github.linux.amd64.yml
+    artifacts:
+    - pyarrow-1.9.0.dev10520-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+    params:
+      python_version: '3.10'
+      manylinux_version: '2014'
+    branch: build-34-github-wheel-manylinux2014-cp310-amd64
+    commit: 00825fa0dcde4ffda9c98e59f19edc61262728a9
+  verify-rc-binaries-apt-linux-amd64: !Task
+    name: verify-rc-binaries-apt-linux-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.yml
+    artifacts: []
+    params:
+      target: apt
+
+  ######################## macOS verification ################################
+
+    branch: build-34-github-verify-rc-binaries-apt-linux-amd64
+    commit: 351c62639e5be22eea7dd3b59a7a7732332f347b
+  wheel-manylinux2014-cp39-arm64: !Task
+    name: wheel-manylinux2014-cp39-arm64
+    ci: travis
+    template: python-wheels/travis.linux.arm64.yml
+    artifacts:
+    - pyarrow-1.9.0.dev10520-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
+    params:
+      python_version: '3.9'
+      manylinux_version: '2014'
+    branch: build-34-travis-wheel-manylinux2014-cp39-arm64
+    commit: d7ad0c3f4446f5e4c9516bf93eb565d89f265857
+  wheel-manylinux2014-cp38-amd64: !Task
+    name: wheel-manylinux2014-cp38-amd64
+    ci: github
+    template: python-wheels/github.linux.amd64.yml
+    artifacts:
+    - pyarrow-1.9.0.dev10520-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+    params:
+      python_version: '3.8'
+      manylinux_version: '2014'
+    branch: build-34-github-wheel-manylinux2014-cp38-amd64
+    commit: bd9833a0291fbc5955ec6310fb4c28d7a87a025c
+  verify-rc-source-java-linux-ubuntu-18.04-amd64: !Task
+    name: verify-rc-source-java-linux-ubuntu-18.04-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '18.04'
+      target: java
+      distro: ubuntu
+    branch: build-34-github-verify-rc-source-java-linux-ubuntu-18.04-amd64
+    commit: 5036d79d0b770480d84597b388201f62637ab98a
+  verify-rc-binaries-jars-linux-conda-latest-amd64: !Task
+    name: verify-rc-binaries-jars-linux-conda-latest-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      target: jars
+      distro: conda
+    branch: build-34-github-verify-rc-binaries-jars-linux-conda-latest-amd64
+    commit: 064ddd08ab37bae9b73eb0ac3c92fb885fe0f667
+  test-r-linux-as-cran: !Task
+    name: test-r-linux-as-cran
+    ci: github
+    template: r/github.linux.cran.yml
+    artifacts: []
+    params:
+      MATRIX: ${{ matrix.r_image }}
+
+    branch: build-34-github-test-r-linux-as-cran
+    commit: cb2d696de0ccd518e6f1fe280015326a623df573
+  verify-rc-binaries-wheels-windows: !Task
+    name: verify-rc-binaries-wheels-windows
+    ci: github
+    template: verify-rc/github.win.yml
+    artifacts: []
+    params:
+      env:
+        PYARROW_TEST_GDB: OFF
+      script: verify-release-candidate-wheels.bat
+
+############################## Docker tests ##################################
+
+    branch: build-34-github-verify-rc-binaries-wheels-windows
+    commit: aa9170aa3d31455092706c5e1c1989ff5444948e
+  test-r-depsource-system: !Task
+    name: test-r-depsource-system
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      flags: -e ARROW_DEPENDENCY_SOURCE=SYSTEM -e ARROW_GCS=OFF -e xsimd_SOURCE=BUNDLED
+      image: ubuntu-r-only-r
+
+    branch: build-34-github-test-r-depsource-system
+    commit: f7406f380066672459d5105c19941bea01929ed5
+  verify-rc-source-cpp-macos-arm64: !Task
+    name: verify-rc-source-cpp-macos-arm64
+    ci: github
+    template: verify-rc/github.macos.arm64.yml
+    artifacts: []
+    params:
+      env:
+        ARROW_PLASMA: 0
+        ARROW_FLIGHT: 0
+        ARROW_GANDIVA: 0
+        TEST_INTEGRATION_JAVA: 0
+        PYTEST_ADDOPTS: -k 'not test_cancellation'
+      target: cpp
+      github_runner: [self-hosted, macOS, arm64]
+    branch: build-34-github-verify-rc-source-cpp-macos-arm64
+    commit: 8fdf35dfc74038a199d882d98cb43b7a85df1c83
+  verify-rc-source-java-linux-almalinux-8-amd64: !Task
+    name: verify-rc-source-java-linux-almalinux-8-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        ALMALINUX: '8'
+      target: java
+      distro: almalinux
+    branch: build-34-github-verify-rc-source-java-linux-almalinux-8-amd64
+    commit: b7d51cd765fb94b5c55406d8841af86093a48eb6
+  verify-rc-source-go-linux-ubuntu-18.04-amd64: !Task
+    name: verify-rc-source-go-linux-ubuntu-18.04-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '18.04'
+      target: go
+      distro: ubuntu
+    branch: build-34-github-verify-rc-source-go-linux-ubuntu-18.04-amd64
+    commit: 6e35243a7a30adb0e7cb2dcb7db2b9767afc17a1
+  test-conda-cpp: !Task
+    name: test-conda-cpp
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      image: conda-cpp
+    branch: build-34-github-test-conda-cpp
+    commit: b7e537bbdcba618f0aa5eb0dfdb399d6c51e3741
+  test-ubuntu-ruby: !Task
+    name: test-ubuntu-ruby
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      image: ubuntu-ruby
+
+  # Use azure to run valgrind tests to prevent OOM
+    branch: build-34-github-test-ubuntu-ruby
+    commit: 69c95cd04186285a8d53004f09c2fc284acaa52b
+  verify-rc-source-integration-linux-ubuntu-22.04-amd64: !Task
+    name: verify-rc-source-integration-linux-ubuntu-22.04-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '22.04'
+      target: integration
+      distro: ubuntu
+    branch: build-34-github-verify-rc-source-integration-linux-ubuntu-22.04-amd64
+    commit: 489e59d3cbf96e04fe1900f898344d065b7dc92e
+  test-conda-python-3.10: !Task
+    name: test-conda-python-3.10
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        PYTHON: '3.10'
+      image: conda-python
+
+    branch: build-34-github-test-conda-python-3.10
+    commit: a758d9b194cbdd97810d27b792bfe1f57179d588
+  verify-rc-binaries-jars-linux-ubuntu-22.04-amd64: !Task
+    name: verify-rc-binaries-jars-linux-ubuntu-22.04-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      target: jars
+      distro: ubuntu
+    branch: build-34-github-verify-rc-binaries-jars-linux-ubuntu-22.04-amd64
+    commit: 494727dafcb1c82868c46412697871a6e0b08ac3
+  verify-rc-source-integration-linux-almalinux-8-amd64: !Task
+    name: verify-rc-source-integration-linux-almalinux-8-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        ALMALINUX: '8'
+      target: integration
+      distro: almalinux
+    branch: build-34-github-verify-rc-source-integration-linux-almalinux-8-amd64
+    commit: 08ed4fa13518dae48b5526be8f20930459fa9c9c
+  test-r-install-local: !Task
+    name: test-r-install-local
+    ci: github
+    template: r/github.macos-linux.local.yml
+    artifacts: []
+    params: {}
+    branch: build-34-github-test-r-install-local
+    commit: 7bf0a66d815641576aaa0bfd01967729cf9fc653
+  test-conda-python-3.9-dask-master: !Task
+    name: test-conda-python-3.9-dask-master
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        PYTHON: 3.9
+        DASK: master
+      # use the latest dask release, so prevent reusing any cached layers
+      flags: --no-leaf-cache
+      image: conda-python-dask
+
+# Turbodbc is currently failing to build. See:
+# https://issues.apache.org/jira/browse/ARROW-15997
+# #   test-conda-python-3.7-turbodbc-latest:
+#     ci: github
+#     template: docker-tests/github.linux.yml
+#     params:
+#       env:
+#         PYTHON: 3.7
+#         TURBODBC: latest
+#       # use the latest turbodbc release, so prevent reusing any cached layers
+#       flags: --no-leaf-cache
+#       image: conda-python-turbodbc
+# #   test-conda-python-3.7-turbodbc-master:
+#     ci: github
+#     template: docker-tests/github.linux.yml
+#     params:
+#       env:
+#         PYTHON: 3.7
+#         TURBODBC: master
+#       # use the latest turbodbc release, so prevent reusing any cached layers
+#       flags: --no-leaf-cache
+#       image: conda-python-turbodbc
+# 
+    branch: build-34-github-test-conda-python-3.9-dask-master
+    commit: e1aa2079546584e272690232a92f93be5ad91816
+  verify-rc-source-windows: !Task
+    name: verify-rc-source-windows
+    ci: github
+    template: verify-rc/github.win.yml
+    artifacts: []
+    params:
+      env:
+        PYARROW_TEST_GDB: OFF
+      script: verify-release-candidate.bat
+
+    branch: build-34-github-verify-rc-source-windows
+    commit: 50901bfcc93f35df4ab1ca36a037fb3a1927f59a
+  verify-rc-source-csharp-linux-ubuntu-22.04-amd64: !Task
+    name: verify-rc-source-csharp-linux-ubuntu-22.04-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '22.04'
+      target: csharp
+      distro: ubuntu
+    branch: build-34-github-verify-rc-source-csharp-linux-ubuntu-22.04-amd64
+    commit: 6165291c04200a5dc9dd1558cd06abab9789dc7d
+  verify-rc-source-ruby-linux-almalinux-8-amd64: !Task
+    name: verify-rc-source-ruby-linux-almalinux-8-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        ALMALINUX: '8'
+      target: ruby
+      distro: almalinux
+
+    branch: build-34-github-verify-rc-source-ruby-linux-almalinux-8-amd64
+    commit: 19eaa89a325bfc4d4ae65d62e2e045c8e149a08a
+  test-r-devdocs: !Task
+    name: test-r-devdocs
+    ci: github
+    template: r/github.devdocs.yml
+    artifacts: []
+    params: {}
+    branch: build-34-github-test-r-devdocs
+    commit: 702a39b3d3e3fabd85766ef307855e4cd35da7ee
+  test-debian-c-glib: !Task
+    name: test-debian-c-glib
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      image: debian-c-glib
+    branch: build-34-github-test-debian-c-glib
+    commit: 663162583f8a37ad331e158c99658e27a379ebca
+  verify-rc-source-java-linux-ubuntu-20.04-amd64: !Task
+    name: verify-rc-source-java-linux-ubuntu-20.04-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '20.04'
+      target: java
+      distro: ubuntu
+    branch: build-34-github-verify-rc-source-java-linux-ubuntu-20.04-amd64
+    commit: de2a22fa3686bb7a7ecd5a28943f3bd9578aa45e
+  verify-rc-binaries-jars-linux-almalinux-8-amd64: !Task
+    name: verify-rc-binaries-jars-linux-almalinux-8-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      target: jars
+      distro: almalinux
+    branch: build-34-github-verify-rc-binaries-jars-linux-almalinux-8-amd64
+    commit: 624aa6dce81aa1111f450ef308b0860e8337c2c6
+  wheel-windows-cp39-amd64: !Task
+    name: wheel-windows-cp39-amd64
+    ci: github
+    template: python-wheels/github.windows.yml
+    artifacts:
+    - pyarrow-1.9.0.dev10520-cp39-cp39-win_amd64.whl
+    params:
+      python_version: '3.9'
+    branch: build-34-github-wheel-windows-cp39-amd64
+    commit: b1f4465d4bc1c57436fc0b4eeb49e52fa0926389
+  test-r-rhub-debian-gcc-devel-lto-latest: !Task
+    name: test-r-rhub-debian-gcc-devel-lto-latest
+    ci: azure
+    template: r/azure.linux.yml
+    artifacts: []
+    params:
+      r_org: rhub
+      r_image: debian-gcc-devel-lto
+      r_tag: latest
+      flags: -e NOT_CRAN=false -e INSTALL_ARGS=--use-LTO
+
+  # This one has -flto=auto
+    branch: build-34-azure-test-r-rhub-debian-gcc-devel-lto-latest
+    commit: 0f934323384c3345f2af69e794fc18af76afe32b
+  test-conda-python-3.9-dask-latest: !Task
+    name: test-conda-python-3.9-dask-latest
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        PYTHON: 3.9
+        DASK: latest
+      # use the latest dask release, so prevent reusing any cached layers
+      flags: --no-leaf-cache
+      image: conda-python-dask
+    branch: build-34-github-test-conda-python-3.9-dask-latest
+    commit: 9a0e0eeab893efb9b832e2db6f06b5acfc2d56b2
+  verify-rc-source-ruby-linux-ubuntu-20.04-amd64: !Task
+    name: verify-rc-source-ruby-linux-ubuntu-20.04-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '20.04'
+      target: ruby
+      distro: ubuntu
+
+    branch: build-34-github-verify-rc-source-ruby-linux-ubuntu-20.04-amd64
+    commit: bd10f860519e72605cff5efedb8b52f6c032da38
+  verify-rc-source-python-macos-conda-amd64: !Task
+    name: verify-rc-source-python-macos-conda-amd64
+    ci: github
+    template: verify-rc/github.macos.amd64.yml
+    artifacts: []
+    params:
+      target: python
+      use_conda: true
+      github_runner: macos-latest
+
+    branch: build-34-github-verify-rc-source-python-macos-conda-amd64
+    commit: 17ef5cc2cb964ac34f07724ff7b80fd54a9f8da6
+  verify-rc-source-cpp-macos-conda-amd64: !Task
+    name: verify-rc-source-cpp-macos-conda-amd64
+    ci: github
+    template: verify-rc/github.macos.amd64.yml
+    artifacts: []
+    params:
+      target: cpp
+      use_conda: true
+      github_runner: macos-latest
+    branch: build-34-github-verify-rc-source-cpp-macos-conda-amd64
+    commit: 66e5e33cfb95ea40994cf7d562e6ab8ceca01052
+  verify-rc-binaries-wheels-macos-12-amd64-conda: !Task
+    name: verify-rc-binaries-wheels-macos-12-amd64-conda
+    ci: github
+    template: verify-rc/github.macos.amd64.yml
+    artifacts: []
+    params:
+      env:
+        USE_CONDA: 1
+      github_runner: macos-12
+      target: wheels
+
+    branch: build-34-github-verify-rc-binaries-wheels-macos-12-amd64-conda
+    commit: 4f9b725d73c292bdfd858930274aa21e7d07c918
+  verify-rc-source-ruby-linux-ubuntu-18.04-amd64: !Task
+    name: verify-rc-source-ruby-linux-ubuntu-18.04-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '18.04'
+      target: ruby
+      distro: ubuntu
+
+    branch: build-34-github-verify-rc-source-ruby-linux-ubuntu-18.04-amd64
+    commit: 16ae7d97056be6ff188c4572234a88ee149800b0
+  test-r-gcc-12: !Task
+    name: test-r-gcc-12
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: 22.04
+        GCC_VERSION: 12
+      image: ubuntu-r-only-r
+
+    branch: build-34-github-test-r-gcc-12
+    commit: 08f1dce8073a0eb81d20010a350cd598e7352cc5
+  test-conda-python-3.8-hypothesis: !Task
+    name: test-conda-python-3.8-hypothesis
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        PYTHON: 3.8
+        HYPOTHESIS_PROFILE: ci
+        PYARROW_TEST_HYPOTHESIS: ON
+        # limit to execute hypothesis tests only
+        PYTEST_ARGS: -m hypothesis
+      image: conda-python-pandas
+
+    branch: build-34-github-test-conda-python-3.8-hypothesis
+    commit: e835fe43008c0d87464e3921949cad3041dff240
+  verify-rc-source-cpp-linux-conda-latest-amd64: !Task
+    name: verify-rc-source-cpp-linux-conda-latest-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        CONDA: latest
+      target: cpp
+      distro: conda
+    branch: build-34-github-verify-rc-source-cpp-linux-conda-latest-amd64
+    commit: 41324a412dc51356adc476e1520b781d911f1453
+  verify-rc-source-java-linux-ubuntu-22.04-amd64: !Task
+    name: verify-rc-source-java-linux-ubuntu-22.04-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '22.04'
+      target: java
+      distro: ubuntu
+    branch: build-34-github-verify-rc-source-java-linux-ubuntu-22.04-amd64
+    commit: f4440238f7142b62d0d35e7ca09e667a83ad8092
+  verify-rc-source-cpp-macos-amd64: !Task
+    name: verify-rc-source-cpp-macos-amd64
+    ci: github
+    template: verify-rc/github.macos.amd64.yml
+    artifacts: []
+    params:
+      target: cpp
+      github_runner: macos-latest
+    branch: build-34-github-verify-rc-source-cpp-macos-amd64
+    commit: f58f6720e2a1804e867c012af0c20dd65a051a0b
+  test-fedora-r-clang-sanitizer: !Task
+    name: test-fedora-r-clang-sanitizer
+    ci: azure
+    template: docker-tests/azure.linux.yml
+    artifacts: []
+    params:
+      env:
+        R_PRUNE_DEPS: true
+      image: fedora-r-clang-sanitizer
+
+    branch: build-34-azure-test-fedora-r-clang-sanitizer
+    commit: cd3711ee44404d9d872ec753f374572e7dc91638
+  verify-rc-source-js-linux-ubuntu-18.04-amd64: !Task
+    name: verify-rc-source-js-linux-ubuntu-18.04-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '18.04'
+      target: js
+      distro: ubuntu
+    branch: build-34-github-verify-rc-source-js-linux-ubuntu-18.04-amd64
+    commit: 71384d12269b6161429c08548123ec49975efe74
+  test-fedora-35-python-3: !Task
+    name: test-fedora-35-python-3
+    ci: azure
+    template: docker-tests/azure.linux.yml
+    artifacts: []
+    params:
+      env:
+        FEDORA: 35
+      image: fedora-python
+
+    branch: build-34-azure-test-fedora-35-python-3
+    commit: 35996bf29a401bf8f2e76a286f021af930b15761
+  test-r-offline-minimal: !Task
+    name: test-r-offline-minimal
+    ci: azure
+    template: r/azure.linux.yml
+    artifacts: []
+    params:
+      r_org: rocker
+      r_image: r-base
+      r_tag: latest
+      flags: -e TEST_OFFLINE_BUILD=true
+
+    branch: build-34-azure-test-r-offline-minimal
+    commit: ab79d332bd194a3ffbcd82cb5c78c1df068f217f
+  test-r-gcc-11: !Task
+    name: test-r-gcc-11
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: 22.04
+        GCC_VERSION: 11
+      image: ubuntu-r-only-r
+
+  # This also has -flto=auto
+    branch: build-34-github-test-r-gcc-11
+    commit: 4c4f0b1252fc110e9aac7a690296c8c29001741c
+  test-ubuntu-default-docs: !Task
+    name: test-ubuntu-default-docs
+    ci: azure
+    template: docker-tests/azure.linux.yml
+    artifacts:
+    - docs.tar.gz
+    params:
+      artifacts: build/docs.tar.gz
+      flags: -v $PWD/build/:/build/
+      image: ubuntu-docs
+      post_script: |
+        cd build
+        sudo chown -R ${USER}: .
+        tar cvzf docs.tar.gz docs
+    branch: build-34-azure-test-ubuntu-default-docs
+    commit: 654a4f7fbf9d48ddbeaf8ce26071bdfef783aad2
+  test-conda-python-3.7-pandas-0.24: !Task
+    name: test-conda-python-3.7-pandas-0.24
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        PYTHON: '3.7'
+        PANDAS: '0.24'
+        NUMPY: '1.19'
+      image: conda-python-pandas
+    branch: build-34-github-test-conda-python-3.7-pandas-0.24
+    commit: b526317dcd4e599c8dabac6e06f9d1c53cfd4172
+  test-ubuntu-18.04-cpp-release: !Task
+    name: test-ubuntu-18.04-cpp-release
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: 18.04
+      flags: -e ARROW_BUILD_TYPE=release
+      image: ubuntu-cpp
+
+    branch: build-34-github-test-ubuntu-18.04-cpp-release
+    commit: 5a37cc5ae9a73491f0c38275d65cb071d46db8f7
+  test-ubuntu-18.04-cpp-static: !Task
+    name: test-ubuntu-18.04-cpp-static
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: 18.04
+      flags: -e ARROW_BUILD_SHARED=OFF -e ARROW_BUILD_STATIC=ON -e ARROW_TEST_LINKAGE=static
+      image: ubuntu-cpp
+
+    branch: build-34-github-test-ubuntu-18.04-cpp-static
+    commit: cb3b4a059d88ca1218d975f6326425b9cbfd695c
+  wheel-windows-cp310-amd64: !Task
+    name: wheel-windows-cp310-amd64
+    ci: github
+    template: python-wheels/github.windows.yml
+    artifacts:
+    - pyarrow-1.9.0.dev10520-cp310-cp310-win_amd64.whl
+    params:
+      python_version: '3.10'
+    branch: build-34-github-wheel-windows-cp310-amd64
+    commit: 00f80d460264c4fc9cf0e0fef8f8d2e9c070c6cc
+  test-alpine-linux-cpp: !Task
+    name: test-alpine-linux-cpp
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      image: alpine-linux-cpp
+    branch: build-34-github-test-alpine-linux-cpp
+    commit: 1b9ad710c333ebcc2bfae470f0899d439dd89618
+  test-debian-10-cpp-amd64: !Task
+    name: test-debian-10-cpp-amd64
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        ARCH: amd64
+        DEBIAN: '10'
+      image: debian-cpp
+
+    branch: build-34-github-test-debian-10-cpp-amd64
+    commit: 050633b7ac3a69ba55a72b997b19e83300876d06
+  test-debian-11-cpp-amd64: !Task
+    name: test-debian-11-cpp-amd64
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        ARCH: amd64
+        DEBIAN: '11'
+      image: debian-cpp
+
+    branch: build-34-github-test-debian-11-cpp-amd64
+    commit: 229c54d835b7f7e229d6681da8ec920d25e19997
+  verify-rc-source-python-linux-conda-latest-amd64: !Task
+    name: verify-rc-source-python-linux-conda-latest-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        CONDA: latest
+      target: python
+      distro: conda
+    branch: build-34-github-verify-rc-source-python-linux-conda-latest-amd64
+    commit: 297886ef477e2a83ba737027f2444732fcc6f9db
+  test-ubuntu-20.04-cpp-bundled: !Task
+    name: test-ubuntu-20.04-cpp-bundled
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: 20.04
+      image: ubuntu-cpp-bundled
+
+    branch: build-34-github-test-ubuntu-20.04-cpp-bundled
+    commit: 5cbcacf00c1fc5dd4692ce7315ad59ad1cdbd09c
+  wheel-manylinux2014-cp37-amd64: !Task
+    name: wheel-manylinux2014-cp37-amd64
+    ci: github
+    template: python-wheels/github.linux.amd64.yml
+    artifacts:
+    - pyarrow-1.9.0.dev10520-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+    params:
+      python_version: '3.7'
+      manylinux_version: '2014'
+    branch: build-34-github-wheel-manylinux2014-cp37-amd64
+    commit: 9ea3903d5654f0556b4fbf8f12271b89a6af850f
+  test-conda-python-3.8-spark-v3.2.0: !Task
+    name: test-conda-python-3.8-spark-v3.2.0
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        PYTHON: '3.8'
+        SPARK: v3.2.0
+        TEST_PYARROW_ONLY: 'false'
+      # use the branch-3.0 of spark, so prevent reusing any layers
+      flags: --no-leaf-cache
+      image: conda-python-spark
+      fetch_depth: 0
+    branch: build-34-github-test-conda-python-3.8-spark-v3.2.0
+    commit: 65c95e045ce32bc77e694c27891abf1b101e1df0
+  verify-rc-source-go-linux-almalinux-8-amd64: !Task
+    name: verify-rc-source-go-linux-almalinux-8-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        ALMALINUX: '8'
+      target: go
+      distro: almalinux
+    branch: build-34-github-verify-rc-source-go-linux-almalinux-8-amd64
+    commit: 5517685add3a3f94a26d44b94134abf97418e2f0
+  verify-rc-binaries-yum-linux-amd64: !Task
+    name: verify-rc-binaries-yum-linux-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.yml
+    artifacts: []
+    params:
+      target: yum
+    branch: build-34-github-verify-rc-binaries-yum-linux-amd64
+    commit: b2b4f3c1e8bb1cff0db04dc429dff494776a7b6b
+  test-build-vcpkg-win: !Task
+    name: test-build-vcpkg-win
+    ci: github
+    template: vcpkg-tests/github.windows.yml
+    artifacts: []
+    params: {}
+    branch: build-34-github-test-build-vcpkg-win
+    commit: 2ed0b0f12931fb0736d4c53f248eb300a28e7de4
+  verify-rc-source-python-linux-ubuntu-18.04-amd64: !Task
+    name: verify-rc-source-python-linux-ubuntu-18.04-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '18.04'
+      target: python
+      distro: ubuntu
+    branch: build-34-github-verify-rc-source-python-linux-ubuntu-18.04-amd64
+    commit: e0e7c0167bfd7ecf30113cccfe958b88bab48ba5
+  test-ubuntu-22.04-cpp: !Task
+    name: test-ubuntu-22.04-cpp
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '22.04'
+      image: ubuntu-cpp
+
+    branch: build-34-github-test-ubuntu-22.04-cpp
+    commit: 43ac25ef0a8fa7a9e5d9bd4f859f0d95e3d8c33c
+  verify-rc-source-go-linux-conda-latest-amd64: !Task
+    name: verify-rc-source-go-linux-conda-latest-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        CONDA: latest
+      target: go
+      distro: conda
+    branch: build-34-github-verify-rc-source-go-linux-conda-latest-amd64
+    commit: e943bb45c2233e6f2b368e775db335865b13571b
+  test-conda-python-3.7-hdfs-2.9.2: !Task
+    name: test-conda-python-3.7-hdfs-2.9.2
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        PYTHON: 3.7
+        HDFS: 2.9.2
+      image: conda-python-hdfs
+    branch: build-34-github-test-conda-python-3.7-hdfs-2.9.2
+    commit: 87301b0024a1d13112f8793f6f0a2a90b2f71693
+  wheel-manylinux2014-cp310-arm64: !Task
+    name: wheel-manylinux2014-cp310-arm64
+    ci: travis
+    template: python-wheels/travis.linux.arm64.yml
+    artifacts:
+    - pyarrow-1.9.0.dev10520-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
+    params:
+      python_version: '3.10'
+      manylinux_version: '2014'
+    branch: build-34-travis-wheel-manylinux2014-cp310-arm64
+    commit: 84b0aea1cb32eb3bbf429cadae70c049a2c2c4e2
+  test-r-depsource-bundled: !Task
+    name: test-r-depsource-bundled
+    ci: azure
+    template: r/azure.linux.yml
+    artifacts: []
+    params:
+      r_org: rocker
+      r_image: r-base
+      r_tag: latest
+      flags: -e ARROW_DEPENDENCY_SOURCE=BUNDLED
+
+    branch: build-34-azure-test-r-depsource-bundled
+    commit: 911aa4f95735b5ba7277460d81f5e9a7729c9864
+  verify-rc-source-go-linux-ubuntu-20.04-amd64: !Task
+    name: verify-rc-source-go-linux-ubuntu-20.04-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '20.04'
+      target: go
+      distro: ubuntu
+    branch: build-34-github-verify-rc-source-go-linux-ubuntu-20.04-amd64
+    commit: 933e468bcde7f7c2a67c0e2d40a9e8a779f59e3e
+  wheel-manylinux2014-cp38-arm64: !Task
+    name: wheel-manylinux2014-cp38-arm64
+    ci: travis
+    template: python-wheels/travis.linux.arm64.yml
+    artifacts:
+    - pyarrow-1.9.0.dev10520-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
+    params:
+      python_version: '3.8'
+      manylinux_version: '2014'
+    branch: build-34-travis-wheel-manylinux2014-cp38-arm64
+    commit: 204f1fefb7e6b3a6f3ec49e8f2b7203b047e45f1
+  verify-rc-source-js-linux-conda-latest-amd64: !Task
+    name: verify-rc-source-js-linux-conda-latest-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        CONDA: latest
+      target: js
+      distro: conda
+    branch: build-34-github-verify-rc-source-js-linux-conda-latest-amd64
+    commit: ca16d6a6bfd7989a1286d29b8345e7227e671b70
+  verify-rc-binaries-wheels-linux-ubuntu-22.04-amd64: !Task
+    name: verify-rc-binaries-wheels-linux-ubuntu-22.04-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      target: wheels
+      distro: ubuntu
+
+
+  # Separated these tasks from the loop above due to:
+  # - 'binary' verification is not platform dependent
+  # - 'yum' and 'apt' requires docker so we need to run the verification script
+  #   directly on the host
+    branch: build-34-github-verify-rc-binaries-wheels-linux-ubuntu-22.04-amd64
+    commit: cfc4a547be13b8e7e703cb587780909cb26a252a
+  conan-maximum: !Task
+    name: conan-maximum
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      # ARROW-17395: Enable this again when grpc is updated.
+      # -e ARROW_CONAN_WITH_FLIGHT_RPC=True
+      flags: >-
+        -e ARROW_CONAN_PARQUET=True
+        -e ARROW_CONAN_WITH_BROTLI=True
+        -e ARROW_CONAN_WITH_BZ2=True
+        -e ARROW_CONAN_WITH_GLOG=True
+        -e ARROW_CONAN_WITH_JEMALLOC=True
+        -e ARROW_CONAN_WITH_JSON=True
+        -e ARROW_CONAN_WITH_LZ4=True
+        -e ARROW_CONAN_WITH_SNAPPY=True
+        -e ARROW_CONAN_WITH_ZSTD=True
+      image: conan
+
+  ########################### Python Minimal ############################
+
+    branch: build-34-github-conan-maximum
+    commit: 822dee0666f5abdc2b3fa2d6570042101552a323
+  verify-rc-binaries-wheels-linux-conda-latest-amd64: !Task
+    name: verify-rc-binaries-wheels-linux-conda-latest-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      target: wheels
+      distro: conda
+
+    branch: build-34-github-verify-rc-binaries-wheels-linux-conda-latest-amd64
+    commit: 6b8d268811abcc1ec7b98fe2c79f02bb74bbb8ca
+  verify-rc-source-integration-linux-ubuntu-18.04-amd64: !Task
+    name: verify-rc-source-integration-linux-ubuntu-18.04-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '18.04'
+      target: integration
+      distro: ubuntu
+    branch: build-34-github-verify-rc-source-integration-linux-ubuntu-18.04-amd64
+    commit: caa00a30a40507e564d2b9940fd6f6f1cb1329d0
+  test-conda-python-3.9-pandas-master: !Task
+    name: test-conda-python-3.9-pandas-master
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        PYTHON: '3.9'
+        PANDAS: master
+        NUMPY: nightly
+      # use the latest pandas release, so prevent reusing any cached layers
+      flags: --no-leaf-cache
+      image: conda-python-pandas
+
+    branch: build-34-github-test-conda-python-3.9-pandas-master
+    commit: fd8d30e94ab1f71e444bfc07e76b52fb62bf135b
+  verify-rc-source-python-linux-ubuntu-22.04-amd64: !Task
+    name: verify-rc-source-python-linux-ubuntu-22.04-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '22.04'
+      target: python
+      distro: ubuntu
+    branch: build-34-github-verify-rc-source-python-linux-ubuntu-22.04-amd64
+    commit: c5d977b9e8f3b972ebdd83cf67465bbd6b3c89f2
+  verify-rc-source-csharp-macos-amd64: !Task
+    name: verify-rc-source-csharp-macos-amd64
+    ci: github
+    template: verify-rc/github.macos.amd64.yml
+    artifacts: []
+    params:
+      target: csharp
+      github_runner: macos-latest
+    branch: build-34-github-verify-rc-source-csharp-macos-amd64
+    commit: 414d79aadc76d5202b906e88d8e07d0d19c5314b
+  test-r-linux-valgrind: !Task
+    name: test-r-linux-valgrind
+    ci: azure
+    template: docker-tests/azure.linux.yml
+    artifacts: []
+    params:
+      env:
+        ARROW_R_DEV: 'TRUE'
+        UBUNTU: 18.04
+      image: ubuntu-r-valgrind
+
+    branch: build-34-azure-test-r-linux-valgrind
+    commit: 78a465f496939737102afbc211a84410afa0940f
+  verify-rc-source-ruby-macos-arm64: !Task
+    name: verify-rc-source-ruby-macos-arm64
+    ci: github
+    template: verify-rc/github.macos.arm64.yml
+    artifacts: []
+    params:
+      env:
+        ARROW_PLASMA: 0
+        ARROW_FLIGHT: 0
+        ARROW_GANDIVA: 0
+        TEST_INTEGRATION_JAVA: 0
+        PYTEST_ADDOPTS: -k 'not test_cancellation'
+      target: ruby
+      github_runner: [self-hosted, macOS, arm64]
+    branch: build-34-github-verify-rc-source-ruby-macos-arm64
+    commit: 72d05dd48ec92b774823bc2aa461a9b8201a7b6c
+  test-r-minimal-build: !Task
+    name: test-r-minimal-build
+    ci: azure
+    template: r/azure.linux.yml
+    artifacts: []
+    params:
+      r_org: rocker
+      r_image: r-base
+      r_tag: latest
+      flags: -e LIBARROW_MINIMAL=TRUE
+
+    branch: build-34-azure-test-r-minimal-build
+    commit: be887b437d757851ac9124217289d9f516498c80
+  conda-clean: !Task
+    name: conda-clean
+    ci: azure
+    template: conda-recipes/azure.clean.yml
+    artifacts: []
+    params: {}
+    branch: build-34-azure-conda-clean
+    commit: 8b4154b80ab1feeb0c369703ae44e3c71793df8b
+  test-conda-python-3.8: !Task
+    name: test-conda-python-3.8
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        PYTHON: '3.8'
+      image: conda-python
+    branch: build-34-github-test-conda-python-3.8
+    commit: 1959567d3308649f645747f5fd94712dd65ad81d
+  test-conda-python-3.7-kartothek-latest: !Task
+    name: test-conda-python-3.7-kartothek-latest
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        PYTHON: 3.7
+        KARTOTHEK: latest
+      flags: --no-leaf-cache
+      image: conda-python-kartothek
+    branch: build-34-github-test-conda-python-3.7-kartothek-latest
+    commit: 8c847da53bee0d0f018b1e3655ce218ddecc6e90
+  test-ubuntu-20.04-cpp-17: !Task
+    name: test-ubuntu-20.04-cpp-17
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: 20.04
+      flags: -e CMAKE_ARGS=-DCMAKE_CXX_STANDARD=17
+      image: ubuntu-cpp
+
+    branch: build-34-github-test-ubuntu-20.04-cpp-17
+    commit: f8642f9a9862a6af3dfcedd2ae5cf57cb944548d
+  test-r-rstudio-r-base-4.2-centos7-devtoolset-8: !Task
+    name: test-r-rstudio-r-base-4.2-centos7-devtoolset-8
+    ci: azure
+    template: r/azure.linux.yml
+    artifacts: []
+    params:
+      r_org: rstudio
+      r_image: r-base
+      r_tag: 4.2-centos7
+      devtoolset_version: 8
+
+    branch: build-34-azure-test-r-rstudio-r-base-4.2-centos7-devtoolset-8
+    commit: 6cc93dd9869c9a345db7476ecf1020f4ff315016
+  test-r-rhub-ubuntu-gcc-release-latest: !Task
+    name: test-r-rhub-ubuntu-gcc-release-latest
+    ci: azure
+    template: r/azure.linux.yml
+    artifacts: []
+    params:
+      r_org: rhub
+      r_image: ubuntu-gcc-release
+      r_tag: latest
+    branch: build-34-azure-test-r-rhub-ubuntu-gcc-release-latest
+    commit: 29eb32a1ec38add8a75e8e1f76a9bbbf5de0e1da
+  verify-rc-binaries-wheels-macos-12-amd64: !Task
+    name: verify-rc-binaries-wheels-macos-12-amd64
+    ci: github
+    template: verify-rc/github.macos.amd64.yml
+    artifacts: []
+    params:
+      github_runner: macos-12
+      target: wheels
+
+    branch: build-34-github-verify-rc-binaries-wheels-macos-12-amd64
+    commit: e561acc5bde51fee89a7123b8d313dbfccd2a970
+  test-ubuntu-20.04-python-3: !Task
+    name: test-ubuntu-20.04-python-3
+    ci: azure
+    template: docker-tests/azure.linux.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: 20.04
+      image: ubuntu-python
+
+    branch: build-34-azure-test-ubuntu-20.04-python-3
+    commit: f0be6a27bc1573cfad4a821290a1865a371713b1
+  test-r-rhub-debian-gcc-release-custom-ccache: !Task
+    name: test-r-rhub-debian-gcc-release-custom-ccache
+    ci: azure
+    template: r/azure.linux.yml
+    artifacts: []
+    params:
+      r_org: rhub
+      r_image: debian-gcc-release
+      r_tag: latest
+      r_custom_ccache: true
+
+    branch: build-34-azure-test-r-rhub-debian-gcc-release-custom-ccache
+    commit: cd3e73da1d5d877d3cd8defa76fb29e00acfc23d
+  java-jars: !Task
+    name: java-jars
+    ci: github
+    template: java-jars/github.yml
+    artifacts:
+    - arrow-algorithm-1.9.0.dev10520-javadoc.jar
+    - arrow-algorithm-1.9.0.dev10520-sources.jar
+    - arrow-algorithm-1.9.0.dev10520-tests.jar
+    - arrow-algorithm-1.9.0.dev10520.jar
+    - arrow-algorithm-1.9.0.dev10520.pom
+    - arrow-avro-1.9.0.dev10520-javadoc.jar
+    - arrow-avro-1.9.0.dev10520-sources.jar
+    - arrow-avro-1.9.0.dev10520-tests.jar
+    - arrow-avro-1.9.0.dev10520.jar
+    - arrow-avro-1.9.0.dev10520.pom
+    - arrow-c-data-1.9.0.dev10520-javadoc.jar
+    - arrow-c-data-1.9.0.dev10520-sources.jar
+    - arrow-c-data-1.9.0.dev10520-tests.jar
+    - arrow-c-data-1.9.0.dev10520.jar
+    - arrow-c-data-1.9.0.dev10520.pom
+    - arrow-compression-1.9.0.dev10520-javadoc.jar
+    - arrow-compression-1.9.0.dev10520-sources.jar
+    - arrow-compression-1.9.0.dev10520-tests.jar
+    - arrow-compression-1.9.0.dev10520.jar
+    - arrow-compression-1.9.0.dev10520.pom
+    - arrow-dataset-1.9.0.dev10520-javadoc.jar
+    - arrow-dataset-1.9.0.dev10520-sources.jar
+    - arrow-dataset-1.9.0.dev10520-tests.jar
+    - arrow-dataset-1.9.0.dev10520.jar
+    - arrow-dataset-1.9.0.dev10520.pom
+    - arrow-flight-1.9.0.dev10520.pom
+    - arrow-format-1.9.0.dev10520-javadoc.jar
+    - arrow-format-1.9.0.dev10520-sources.jar
+    - arrow-format-1.9.0.dev10520-tests.jar
+    - arrow-format-1.9.0.dev10520.jar
+    - arrow-format-1.9.0.dev10520.pom
+    - arrow-gandiva-1.9.0.dev10520-javadoc.jar
+    - arrow-gandiva-1.9.0.dev10520-sources.jar
+    - arrow-gandiva-1.9.0.dev10520-tests.jar
+    - arrow-gandiva-1.9.0.dev10520.jar
+    - arrow-gandiva-1.9.0.dev10520.pom
+    - arrow-java-root-1.9.0.dev10520-source-release.zip
+    - arrow-java-root-1.9.0.dev10520.pom
+    - arrow-jdbc-1.9.0.dev10520-javadoc.jar
+    - arrow-jdbc-1.9.0.dev10520-sources.jar
+    - arrow-jdbc-1.9.0.dev10520-tests.jar
+    - arrow-jdbc-1.9.0.dev10520.jar
+    - arrow-jdbc-1.9.0.dev10520.pom
+    - arrow-memory-core-1.9.0.dev10520-javadoc.jar
+    - arrow-memory-core-1.9.0.dev10520-sources.jar
+    - arrow-memory-core-1.9.0.dev10520-tests.jar
+    - arrow-memory-core-1.9.0.dev10520.jar
+    - arrow-memory-core-1.9.0.dev10520.pom
+    - arrow-memory-netty-1.9.0.dev10520-javadoc.jar
+    - arrow-memory-netty-1.9.0.dev10520-sources.jar
+    - arrow-memory-netty-1.9.0.dev10520-tests.jar
+    - arrow-memory-netty-1.9.0.dev10520.jar
+    - arrow-memory-netty-1.9.0.dev10520.pom
+    - arrow-memory-unsafe-1.9.0.dev10520-javadoc.jar
+    - arrow-memory-unsafe-1.9.0.dev10520-sources.jar
+    - arrow-memory-unsafe-1.9.0.dev10520-tests.jar
+    - arrow-memory-unsafe-1.9.0.dev10520.jar
+    - arrow-memory-unsafe-1.9.0.dev10520.pom
+    - arrow-memory-1.9.0.dev10520.pom
+    - arrow-orc-1.9.0.dev10520-javadoc.jar
+    - arrow-orc-1.9.0.dev10520-sources.jar
+    - arrow-orc-1.9.0.dev10520-tests.jar
+    - arrow-orc-1.9.0.dev10520.jar
+    - arrow-orc-1.9.0.dev10520.pom
+    - arrow-performance-1.9.0.dev10520-sources.jar
+    - arrow-performance-1.9.0.dev10520-tests.jar
+    - arrow-performance-1.9.0.dev10520.jar
+    - arrow-performance-1.9.0.dev10520.pom
+    - arrow-plasma-1.9.0.dev10520-javadoc.jar
+    - arrow-plasma-1.9.0.dev10520-sources.jar
+    - arrow-plasma-1.9.0.dev10520-tests.jar
+    - arrow-plasma-1.9.0.dev10520.jar
+    - arrow-plasma-1.9.0.dev10520.pom
+    - arrow-tools-1.9.0.dev10520-jar-with-dependencies.jar
+    - arrow-tools-1.9.0.dev10520-javadoc.jar
+    - arrow-tools-1.9.0.dev10520-sources.jar
+    - arrow-tools-1.9.0.dev10520-tests.jar
+    - arrow-tools-1.9.0.dev10520.jar
+    - arrow-tools-1.9.0.dev10520.pom
+    - arrow-vector-1.9.0.dev10520-javadoc.jar
+    - arrow-vector-1.9.0.dev10520-shade-format-flatbuffers.jar
+    - arrow-vector-1.9.0.dev10520-sources.jar
+    - arrow-vector-1.9.0.dev10520-tests.jar
+    - arrow-vector-1.9.0.dev10520.jar
+    - arrow-vector-1.9.0.dev10520.pom
+    - flight-core-1.9.0.dev10520-jar-with-dependencies.jar
+    - flight-core-1.9.0.dev10520-javadoc.jar
+    - flight-core-1.9.0.dev10520-shaded-ext.jar
+    - flight-core-1.9.0.dev10520-shaded.jar
+    - flight-core-1.9.0.dev10520-sources.jar
+    - flight-core-1.9.0.dev10520-tests.jar
+    - flight-core-1.9.0.dev10520.jar
+    - flight-core-1.9.0.dev10520.pom
+    - flight-grpc-1.9.0.dev10520-javadoc.jar
+    - flight-grpc-1.9.0.dev10520-sources.jar
+    - flight-grpc-1.9.0.dev10520-tests.jar
+    - flight-grpc-1.9.0.dev10520.jar
+    - flight-grpc-1.9.0.dev10520.pom
+    - flight-integration-tests-1.9.0.dev10520-jar-with-dependencies.jar
+    - flight-integration-tests-1.9.0.dev10520-javadoc.jar
+    - flight-integration-tests-1.9.0.dev10520-sources.jar
+    - flight-integration-tests-1.9.0.dev10520-tests.jar
+    - flight-integration-tests-1.9.0.dev10520.jar
+    - flight-integration-tests-1.9.0.dev10520.pom
+    - flight-sql-1.9.0.dev10520-javadoc.jar
+    - flight-sql-1.9.0.dev10520-sources.jar
+    - flight-sql-1.9.0.dev10520-tests.jar
+    - flight-sql-1.9.0.dev10520.jar
+    - flight-sql-1.9.0.dev10520.pom
+    params: {}
+    branch: build-34-github-java-jars
+    commit: b462165c285e8f97eae4a28f312fde60650472b8
+  verify-rc-source-python-macos-arm64: !Task
+    name: verify-rc-source-python-macos-arm64
+    ci: github
+    template: verify-rc/github.macos.arm64.yml
+    artifacts: []
+    params:
+      env:
+        ARROW_PLASMA: 0
+        ARROW_FLIGHT: 0
+        ARROW_GANDIVA: 0
+        TEST_INTEGRATION_JAVA: 0
+        PYTEST_ADDOPTS: -k 'not test_cancellation'
+      target: python
+      github_runner: [self-hosted, macOS, arm64]
+    branch: build-34-github-verify-rc-source-python-macos-arm64
+    commit: fef1ba6ed3f1ef8ba9c11f56ee7ca311effd7c8c
+  verify-rc-source-integration-linux-conda-latest-amd64: !Task
+    name: verify-rc-source-integration-linux-conda-latest-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        CONDA: latest
+      target: integration
+      distro: conda
+    branch: build-34-github-verify-rc-source-integration-linux-conda-latest-amd64
+    commit: f9484aa776e42dbb1ebeefdfe2dd0ef963a212aa
+  verify-rc-source-csharp-macos-arm64: !Task
+    name: verify-rc-source-csharp-macos-arm64
+    ci: github
+    template: verify-rc/github.macos.arm64.yml
+    artifacts: []
+    params:
+      env:
+        ARROW_PLASMA: 0
+        ARROW_FLIGHT: 0
+        ARROW_GANDIVA: 0
+        TEST_INTEGRATION_JAVA: 0
+        PYTEST_ADDOPTS: -k 'not test_cancellation'
+      target: csharp
+      github_runner: [self-hosted, macOS, arm64]
+    branch: build-34-github-verify-rc-source-csharp-macos-arm64
+    commit: 53901fbae44571d693ad09baf8b7b818eb58f8f6
+  verify-rc-source-csharp-linux-ubuntu-20.04-amd64: !Task
+    name: verify-rc-source-csharp-linux-ubuntu-20.04-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '20.04'
+      target: csharp
+      distro: ubuntu
+    branch: build-34-github-verify-rc-source-csharp-linux-ubuntu-20.04-amd64
+    commit: 3f96147d67a0a87ced8b3e69c97fe896d1eacc0d
+  test-conda-python-3.8-pandas-nightly: !Task
+    name: test-conda-python-3.8-pandas-nightly
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        PYTHON: '3.8'
+        PANDAS: nightly
+        NUMPY: nightly
+      # use the latest pandas release, so prevent reusing any cached layers
+      flags: --no-leaf-cache
+      image: conda-python-pandas
+    branch: build-34-github-test-conda-python-3.8-pandas-nightly
+    commit: 244bb4823aec08a676ae0a38252cf1443cff8761
+  verify-rc-binaries-binary-linux-amd64: !Task
+    name: verify-rc-binaries-binary-linux-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.yml
+    artifacts: []
+    params:
+      target: binary
+    branch: build-34-github-verify-rc-binaries-binary-linux-amd64
+    commit: 09a8f981ec0aa850755074dc951504b8c4827598
+  test-r-offline-maximal: !Task
+    name: test-r-offline-maximal
+    ci: github
+    template: r/github.linux.offline.build.yml
+    artifacts: []
+    params: {}
+    branch: build-34-github-test-r-offline-maximal
+    commit: dd4424d201b375d7c7a965df81198c7470111578
+  verify-rc-binaries-wheels-linux-almalinux-8-amd64: !Task
+    name: verify-rc-binaries-wheels-linux-almalinux-8-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      target: wheels
+      distro: almalinux
+
+    branch: build-34-github-verify-rc-binaries-wheels-linux-almalinux-8-amd64
+    commit: e8b8e39175532dbacee5186da1cb34ff69bedea0
+  verify-rc-source-go-linux-ubuntu-22.04-amd64: !Task
+    name: verify-rc-source-go-linux-ubuntu-22.04-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '22.04'
+      target: go
+      distro: ubuntu
+    branch: build-34-github-verify-rc-source-go-linux-ubuntu-22.04-amd64
+    commit: 4698889561779aba002f0f0a0884701c2c12e8b2
+  homebrew-r-brew: !Task
+    name: homebrew-r-brew
+    ci: github
+    template: r/github.macos.brew.yml
+    artifacts: []
+    params:
+      formula: apache-arrow.rb
+
+  ############################## Arrow JAR's ##################################
+
+    branch: build-34-github-homebrew-r-brew
+    commit: d3656166d05060dee314334faaace6f855a37ceb
+  test-r-versions: !Task
+    name: test-r-versions
+    ci: github
+    template: r/github.linux.versions.yml
+    artifacts: []
+    params:
+      MATRIX: ${{ matrix.r_version }}
+
+    branch: build-34-github-test-r-versions
+    commit: 0392e8999ce070b6665ebede04f0a0eecdffaf67
+  test-r-rocker-r-base-latest: !Task
+    name: test-r-rocker-r-base-latest
+    ci: azure
+    template: r/azure.linux.yml
+    artifacts: []
+    params:
+      r_org: rocker
+      r_image: r-base
+      r_tag: latest
+    branch: build-34-azure-test-r-rocker-r-base-latest
+    commit: d42dbcc4eb9cd539953fe54cb489fe9ab4369a72
+  test-ubuntu-18.04-cpp: !Task
+    name: test-ubuntu-18.04-cpp
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '18.04'
+      image: ubuntu-cpp
+    branch: build-34-github-test-ubuntu-18.04-cpp
+    commit: 072bda5a75de24c7b3f0c0880990c1498b4856b5
+  python-sdist: !Task
+    name: python-sdist
+    ci: github
+    template: python-sdist/github.yml
+    artifacts:
+    - pyarrow-1.9.0.dev10520.tar.gz
+    params: {}
+    branch: build-34-github-python-sdist
+    commit: 9b4c7949454b6371502b76b00c07bed6ccf83d84
+  verify-rc-binaries-wheels-linux-ubuntu-20.04-amd64: !Task
+    name: verify-rc-binaries-wheels-linux-ubuntu-20.04-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      target: wheels
+      distro: ubuntu
+
+    branch: build-34-github-verify-rc-binaries-wheels-linux-ubuntu-20.04-amd64
+    commit: d1de3d654cd1421457423386eb6c78efedc687a3
+  test-r-rstudio-r-base-4.1-opensuse153: !Task
+    name: test-r-rstudio-r-base-4.1-opensuse153
+    ci: azure
+    template: r/azure.linux.yml
+    artifacts: []
+    params:
+      r_org: rstudio
+      r_image: r-base
+      r_tag: 4.1-opensuse153
+
+  # This is with R built with --enable-lto
+  # CRAN also does R CMD INSTALL --use-LTO
+  # which overrides the UseLTO field in r/DESCRIPTION
+    branch: build-34-azure-test-r-rstudio-r-base-4.1-opensuse153
+    commit: fe419dadba905432f7c23be81e5738823dc17ff1
+  verify-rc-source-integration-linux-ubuntu-20.04-amd64: !Task
+    name: verify-rc-source-integration-linux-ubuntu-20.04-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '20.04'
+      target: integration
+      distro: ubuntu
+    branch: build-34-github-verify-rc-source-integration-linux-ubuntu-20.04-amd64
+    commit: 493922a74a937b39f90fa7084074ab31be6e58f3
+  test-r-rstudio-r-base-4.2-focal: !Task
+    name: test-r-rstudio-r-base-4.2-focal
+    ci: azure
+    template: r/azure.linux.yml
+    artifacts: []
+    params:
+      r_org: rstudio
+      r_image: r-base
+      r_tag: 4.2-focal
+    branch: build-34-azure-test-r-rstudio-r-base-4.2-focal
+    commit: 726eaa663a6554a381fb2a9264b6639f94dcc6d3
+  verify-rc-source-cpp-linux-almalinux-8-amd64: !Task
+    name: verify-rc-source-cpp-linux-almalinux-8-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        ALMALINUX: '8'
+      target: cpp
+      distro: almalinux
+    branch: build-34-github-verify-rc-source-cpp-linux-almalinux-8-amd64
+    commit: 04a8a97561210f62c9772767d469ee8df9706d13
+  test-ubuntu-20.04-cpp-thread-sanitizer: !Task
+    name: test-ubuntu-20.04-cpp-thread-sanitizer
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        # clang-tools and llvm version need to be synchronized so as
+        # to have the right llvm-symbolizer version
+        CLANG_TOOLS: 11
+        LLVM: 11
+        UBUNTU: 20.04
+      image: ubuntu-cpp-thread-sanitizer
+
+    branch: build-34-github-test-ubuntu-20.04-cpp-thread-sanitizer
+    commit: 4148e6ed386999c0b685b52f6fccfc9bd34394e2
+  test-debian-10-cpp-i386: !Task
+    name: test-debian-10-cpp-i386
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        ARCH: i386
+        DEBIAN: '10'
+      flags: -e ARROW_S3=OFF -e ARROW_GANDIVA=OFF
+      image: debian-cpp
+    branch: build-34-github-test-debian-10-cpp-i386
+    commit: 87f2857ec5e58f591937fa0402b5fe18b21cb5ec
+  test-build-cpp-fuzz: !Task
+    name: test-build-cpp-fuzz
+    ci: github
+    template: fuzz-tests/github.oss-fuzz.yml
+    artifacts: []
+    params: {}
+    branch: build-34-github-test-build-cpp-fuzz
+    commit: d839dec0c9f77381ad79a6b3169c95f6daa018bd
+  conan-minimum: !Task
+    name: conan-minimum
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      image: conan
+
+    branch: build-34-github-conan-minimum
+    commit: 53435c4079444066b970c848564fa7a41e437d36
+  verify-rc-source-integration-macos-conda-amd64: !Task
+    name: verify-rc-source-integration-macos-conda-amd64
+    ci: github
+    template: verify-rc/github.macos.amd64.yml
+    artifacts: []
+    params:
+      target: integration
+      use_conda: true
+      github_runner: macos-latest
+    branch: build-34-github-verify-rc-source-integration-macos-conda-amd64
+    commit: da12c2bc863d7427a54af39dfbc047148f0e9b99
+  verify-rc-source-go-macos-arm64: !Task
+    name: verify-rc-source-go-macos-arm64
+    ci: github
+    template: verify-rc/github.macos.arm64.yml
+    artifacts: []
+    params:
+      env:
+        ARROW_PLASMA: 0
+        ARROW_FLIGHT: 0
+        ARROW_GANDIVA: 0
+        TEST_INTEGRATION_JAVA: 0
+        PYTEST_ADDOPTS: -k 'not test_cancellation'
+      target: go
+      github_runner: [self-hosted, macOS, arm64]
+    branch: build-34-github-verify-rc-source-go-macos-arm64
+    commit: ebcfe7c5f0b89b301480db0cf7b21c7ef5769646
+  verify-rc-source-js-linux-ubuntu-20.04-amd64: !Task
+    name: verify-rc-source-js-linux-ubuntu-20.04-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '20.04'
+      target: js
+      distro: ubuntu
+    branch: build-34-github-verify-rc-source-js-linux-ubuntu-20.04-amd64
+    commit: 665e1f58e96675844bfdc3ff5747a01f737ba83c
+  test-conda-cpp-valgrind: !Task
+    name: test-conda-cpp-valgrind
+    ci: azure
+    template: docker-tests/azure.linux.yml
+    artifacts: []
+    params:
+      image: conda-cpp-valgrind
+
+    branch: build-34-azure-test-conda-cpp-valgrind
+    commit: 7f9c45aa92d9ed5d67ce5e447888bda513e13922
+  verify-rc-source-ruby-linux-ubuntu-22.04-amd64: !Task
+    name: verify-rc-source-ruby-linux-ubuntu-22.04-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '22.04'
+      target: ruby
+      distro: ubuntu
+
+    branch: build-34-github-verify-rc-source-ruby-linux-ubuntu-22.04-amd64
+    commit: 9ff45a191d0bba4f274f798bf4b19e46352d46e7
+  test-ubuntu-20.04-cpp: !Task
+    name: test-ubuntu-20.04-cpp
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '20.04'
+      image: ubuntu-cpp
+    branch: build-34-github-test-ubuntu-20.04-cpp
+    commit: f736a36b542374e0f82cfc6976ddee79ecbc823d
+  test-conda-python-3.7-hdfs-3.2.1: !Task
+    name: test-conda-python-3.7-hdfs-3.2.1
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        PYTHON: 3.7
+        HDFS: 3.2.1
+      image: conda-python-hdfs
+
+    branch: build-34-github-test-conda-python-3.7-hdfs-3.2.1
+    commit: 69231e97174d164d7595ea08d0941ae798028dde
+  test-debian-11-cpp-i386: !Task
+    name: test-debian-11-cpp-i386
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        ARCH: i386
+        DEBIAN: '11'
+      flags: -e ARROW_S3=OFF -e ARROW_GANDIVA=OFF
+      image: debian-cpp
+
+    branch: build-34-github-test-debian-11-cpp-i386
+    commit: b18f376c3ab22d914fbcc99e96f1f6587eaa9b6f
+  test-debian-11-python-3: !Task
+    name: test-debian-11-python-3
+    ci: azure
+    template: docker-tests/azure.linux.yml
+    artifacts: []
+    params:
+      env:
+        DEBIAN: 11
+      image: debian-python
+
+    branch: build-34-azure-test-debian-11-python-3
+    commit: 5c1f743fffb9d07a5d8496abb6c87bf29cb36950
+  test-conda-python-3.7-kartothek-master: !Task
+    name: test-conda-python-3.7-kartothek-master
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        PYTHON: 3.7
+        KARTOTHEK: master
+      flags: --no-leaf-cache
+      image: conda-python-kartothek
+
+    branch: build-34-github-test-conda-python-3.7-kartothek-master
+    commit: bf78c52e87ee5a4e6a9d4a25d82e5f94ac56c2f9
+  verify-rc-binaries-jars-linux-ubuntu-20.04-amd64: !Task
+    name: verify-rc-binaries-jars-linux-ubuntu-20.04-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      target: jars
+      distro: ubuntu
+    branch: build-34-github-verify-rc-binaries-jars-linux-ubuntu-20.04-amd64
+    commit: 329d40224f90a57b7639054dcc906ded1f1465e2
+  verify-rc-binaries-wheels-linux-ubuntu-18.04-amd64: !Task
+    name: verify-rc-binaries-wheels-linux-ubuntu-18.04-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      target: wheels
+      distro: ubuntu
+
+    branch: build-34-github-verify-rc-binaries-wheels-linux-ubuntu-18.04-amd64
+    commit: b59e2bce379c615385c15139a2231de7e1526dd3
+  verify-rc-source-js-linux-almalinux-8-amd64: !Task
+    name: verify-rc-source-js-linux-almalinux-8-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        ALMALINUX: '8'
+      target: js
+      distro: almalinux
+    branch: build-34-github-verify-rc-source-js-linux-almalinux-8-amd64
+    commit: d6ab457ad4f31907290dc11142e204526d75addf
+  test-conda-python-3.7-pandas-latest: !Task
+    name: test-conda-python-3.7-pandas-latest
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        PYTHON: '3.7'
+        PANDAS: latest
+        NUMPY: latest
+        # ensure we have at least one build with parquet encryption disabled
+        PARQUET_REQUIRE_ENCRYPTION: OFF
+      # use the latest pandas release, so prevent reusing any cached layers
+      flags: --no-leaf-cache
+      image: conda-python-pandas
+    branch: build-34-github-test-conda-python-3.7-pandas-latest
+    commit: 39d16c6e9d3b3888779d85333b5e2acb2b7b31ce
+  verify-rc-binaries-wheels-macos-11-amd64: !Task
+    name: verify-rc-binaries-wheels-macos-11-amd64
+    ci: github
+    template: verify-rc/github.macos.amd64.yml
+    artifacts: []
+    params:
+      github_runner: macos-11
+      target: wheels
+
+    branch: build-34-github-verify-rc-binaries-wheels-macos-11-amd64
+    commit: 8e730334efa9f48034485445ab599f4af2191d8d
+  test-conda-python-3.9: !Task
+    name: test-conda-python-3.9
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        PYTHON: '3.9'
+      image: conda-python
+    branch: build-34-github-test-conda-python-3.9
+    commit: f0f13ce4703b3980ae3eb1997ceda98991046ef8
+  test-ubuntu-c-glib: !Task
+    name: test-ubuntu-c-glib
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      image: ubuntu-c-glib
+    branch: build-34-github-test-ubuntu-c-glib
+    commit: b8e656c8c88bc95b3297a8183cfdb5e71950632b
+  test-ubuntu-18.04-r-sanitizer: !Task
+    name: test-ubuntu-18.04-r-sanitizer
+    ci: azure
+    template: docker-tests/azure.linux.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: 18.04
+        R_PRUNE_DEPS: true
+      image: ubuntu-r-sanitizer
+
+    branch: build-34-azure-test-ubuntu-18.04-r-sanitizer
+    commit: 61a1c9956f891428ed6e3e8a7220852e3322a360
+  verify-rc-source-python-linux-almalinux-8-amd64: !Task
+    name: verify-rc-source-python-linux-almalinux-8-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        ALMALINUX: '8'
+      target: python
+      distro: almalinux
+    branch: build-34-github-verify-rc-source-python-linux-almalinux-8-amd64
+    commit: bbbaa0f3173d964020484c19fc3e4e7c89ab0738
+  verify-rc-source-python-linux-ubuntu-20.04-amd64: !Task
+    name: verify-rc-source-python-linux-ubuntu-20.04-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '20.04'
+      target: python
+      distro: ubuntu
+    branch: build-34-github-verify-rc-source-python-linux-ubuntu-20.04-amd64
+    commit: da29bed21d7a068dc30714c22f11d3591c93b4d8
+  test-r-ubuntu-22.04: !Task
+    name: test-r-ubuntu-22.04
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: 22.04
+        R_PRUNE_DEPS: true
+      image: ubuntu-r-only-r
+
+  # This also has -flto=auto
+    branch: build-34-github-test-r-ubuntu-22.04
+    commit: 430bc8b31601a47d9b79f5e5a31c217baa817072
+  wheel-manylinux2014-cp37-arm64: !Task
+    name: wheel-manylinux2014-cp37-arm64
+    ci: travis
+    template: python-wheels/travis.linux.arm64.yml
+    artifacts:
+    - pyarrow-1.9.0.dev10520-cp37-cp37m-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
+    params:
+      python_version: '3.7'
+      manylinux_version: '2014'
+    branch: build-34-travis-wheel-manylinux2014-cp37-arm64
+    commit: f86059ecd97a612ee28c5f8924d93bdb450fea74
+  test-skyhook-integration: !Task
+    name: test-skyhook-integration
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: 20.04
+      flags: -e ARROW_SKYHOOK=ON
+      image: ubuntu-cpp
+
+    branch: build-34-github-test-skyhook-integration
+    commit: 1824ede2ffeba4b1eb9873e05c4d12b0e8847fc2
+  verify-rc-source-java-linux-conda-latest-amd64: !Task
+    name: verify-rc-source-java-linux-conda-latest-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        CONDA: latest
+      target: java
+      distro: conda
+    branch: build-34-github-verify-rc-source-java-linux-conda-latest-amd64
+    commit: 0c3cb5c2cd6d035ffcf74148cb4f328ea54c80ba
+  wheel-manylinux2014-cp39-amd64: !Task
+    name: wheel-manylinux2014-cp39-amd64
+    ci: github
+    template: python-wheels/github.linux.amd64.yml
+    artifacts:
+    - pyarrow-1.9.0.dev10520-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+    params:
+      python_version: '3.9'
+      manylinux_version: '2014'
+    branch: build-34-github-wheel-manylinux2014-cp39-amd64
+    commit: 827ec200ff300980bab39a63ff0cd784f263898a
+  verify-rc-source-js-macos-amd64: !Task
+    name: verify-rc-source-js-macos-amd64
+    ci: github
+    template: verify-rc/github.macos.amd64.yml
+    artifacts: []
+    params:
+      target: js
+      github_runner: macos-latest
+    branch: build-34-github-verify-rc-source-js-macos-amd64
+    commit: 51d5856a83f76994fd8d9438c13e6161643e140d
+  verify-rc-binaries-wheels-macos-11-amd64-conda: !Task
+    name: verify-rc-binaries-wheels-macos-11-amd64-conda
+    ci: github
+    template: verify-rc/github.macos.amd64.yml
+    artifacts: []
+    params:
+      env:
+        USE_CONDA: 1
+      github_runner: macos-11
+      target: wheels
+    branch: build-34-github-verify-rc-binaries-wheels-macos-11-amd64-conda
+    commit: 7a3efaed4a89cd73f212ad1aea6959f9592a90dd
+  verify-rc-source-cpp-linux-ubuntu-20.04-amd64: !Task
+    name: verify-rc-source-cpp-linux-ubuntu-20.04-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '20.04'
+      target: cpp
+      distro: ubuntu
+    branch: build-34-github-verify-rc-source-cpp-linux-ubuntu-20.04-amd64
+    commit: 01926af3c873e72d8e2449f2eeb54d45f72681c5
+  verify-rc-source-cpp-linux-ubuntu-18.04-amd64: !Task
+    name: verify-rc-source-cpp-linux-ubuntu-18.04-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        UBUNTU: '18.04'
+      target: cpp
+      distro: ubuntu
+    branch: build-34-github-verify-rc-source-cpp-linux-ubuntu-18.04-amd64
+    commit: 020e880a84a136718ef838fd6e0f302422bb3e92
+  verify-rc-binaries-jars-linux-ubuntu-18.04-amd64: !Task
+    name: verify-rc-binaries-jars-linux-ubuntu-18.04-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      target: jars
+      distro: ubuntu
+    branch: build-34-github-verify-rc-binaries-jars-linux-ubuntu-18.04-amd64
+    commit: 329d40224f90a57b7639054dcc906ded1f1465e2
+  test-r-arrow-backwards-compatibility: !Task
+    name: test-r-arrow-backwards-compatibility
+    ci: github
+    template: r/github.linux.arrow.version.back.compat.yml
+    artifacts: []
+    params: {}
+    branch: build-34-github-test-r-arrow-backwards-compatibility
+    commit: 719baff21aaf7d7a19427f1017c3294f05dfca2c
+  test-conda-python-3.7-spark-v3.1.2: !Task
+    name: test-conda-python-3.7-spark-v3.1.2
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        PYTHON: '3.7'
+        SPARK: v3.1.2
+        TEST_PYARROW_ONLY: 'false'
+      # use the branch-3.0 of spark, so prevent reusing any layers
+      flags: --no-leaf-cache
+      image: conda-python-spark
+      fetch_depth: 0
+    branch: build-34-github-test-conda-python-3.7-spark-v3.1.2
+    commit: e0d3b9270fd182809e8368c5e3cf9e542edf7162
+  verify-rc-source-go-macos-amd64: !Task
+    name: verify-rc-source-go-macos-amd64
+    ci: github
+    template: verify-rc/github.macos.amd64.yml
+    artifacts: []
+    params:
+      target: go
+      github_runner: macos-latest
+    branch: build-34-github-verify-rc-source-go-macos-amd64
+    commit: 3db5e07c12417a9d3910e43fdd0be1ab3d3991bb
+  test-fedora-35-cpp: !Task
+    name: test-fedora-35-cpp
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        FEDORA: 35
+      image: fedora-cpp
+
+    branch: build-34-github-test-fedora-35-cpp
+    commit: e3879a372305c1363be1ada8eb02b19e7acf6630
+  test-conda-python-3.7: !Task
+    name: test-conda-python-3.7
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        PYTHON: '3.7'
+      image: conda-python
+    branch: build-34-github-test-conda-python-3.7
+    commit: 3d23767ddcf1a2ec5f0e87d8cebd08559e2b2d24
+  test-conda-python-3.8-pandas-latest: !Task
+    name: test-conda-python-3.8-pandas-latest
+    ci: github
+    template: docker-tests/github.linux.yml
+    artifacts: []
+    params:
+      env:
+        PYTHON: '3.8'
+        PANDAS: latest
+        NUMPY: latest
+        # ensure we have at least one build with parquet encryption disabled
+        PARQUET_REQUIRE_ENCRYPTION: OFF
+      # use the latest pandas release, so prevent reusing any cached layers
+      flags: --no-leaf-cache
+      image: conda-python-pandas
+    branch: build-34-github-test-conda-python-3.8-pandas-latest
+    commit: 9c25b58ae851eaac94dd7f2ba892637bcd969423
+  test-debian-11-go-1.16: !Task
+    name: test-debian-11-go-1.16
+    ci: azure
+    template: docker-tests/azure.linux.yml
+    artifacts: []
+    params:
+      env:
+        DEBIAN: 11
+        GO: 1.16
+      image: debian-go
+
+    branch: build-34-azure-test-debian-11-go-1.16
+    commit: 77b0f2f75e49ef1a4a31a290e7214ccfdf30ab3f
+  verify-rc-source-ruby-linux-conda-latest-amd64: !Task
+    name: verify-rc-source-ruby-linux-conda-latest-amd64
+    ci: github
+    template: verify-rc/github.linux.amd64.docker.yml
+    artifacts: []
+    params:
+      env:
+        CONDA: latest
+      target: ruby
+      distro: conda
+
+    branch: build-34-github-verify-rc-source-ruby-linux-conda-latest-amd64
+    commit: 283afd9c05d4827ecbfadd4cc2c0e03dd335f766
+params: {}
+branch: build-34
