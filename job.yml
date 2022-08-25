@@ -1,0 +1,25 @@
+!Job
+target: !Target
+  head: 78d586a45852b69c40b88a43d86a1c90efdf1e0d
+  email: fionala7@gmail.com
+  branch: main
+  remote: https://github.com/mathworks/arrow.git
+  github_repo: mathworks/arrow
+  version: 1.9.0.dev10519
+  no_rc_version: 1.9.0.dev10519
+  no_rc_semver_version: 1.9.0-dev10519
+tasks:
+  homebrew-r-brew: !Task
+    name: homebrew-r-brew
+    ci: github
+    template: r/github.macos.brew.yml
+    artifacts: []
+    params:
+      formula: apache-arrow.rb
+
+  ############################## Arrow JAR's ##################################
+
+    branch: build-35-github-homebrew-r-brew
+    commit: b9433456e68f3663224ecb5ac43a6ffea911232d
+params: {}
+branch: build-35
